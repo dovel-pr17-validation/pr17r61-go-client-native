@@ -1,0 +1,177 @@
+---
+awsFilters:
+  type: object
+  required:
+    - key
+    - value
+  properties:
+    key:
+      type: string
+      description: Key to use as filter, using the format specified at https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html#options
+    value:
+      type: string
+      description: Value of the filter to use
+
+awsRegion:
+  title: AWS region
+  description: AWS region configuration
+  type: object
+  required:
+    - name
+    - region
+    - enabled
+    - retry_timeout
+    - ipv4_address
+  properties:
+    id:
+      type: string
+      x-nullable: true
+      pattern: '^[^\s]+$'
+      description: Auto generated ID.
+      readOnly: true
+    region:
+      type: string
+    description:
+      type: string
+    name:
+      type: string
+    access_key_id:
+      type: string
+      description: AWS Access Key ID.
+    secret_access_key:
+      type: string
+      description: AWS Secret Access Key.
+    enabled:
+      type: boolean
+    retry_timeout:
+      type: integer
+      minimum: 1
+      description: Duration in seconds in-between data pulling requests to the AWS region
+    ipv4_address:
+      type: string
+      description: Select which IPv4 address the Service Discovery has to use for the backend server entry
+      enum: [private, public]
+    allowlist:
+      type: array
+      description: Specify the AWS filters used to filter the EC2 instances to add
+      x-omitempty: true
+      items:
+        $ref: "#/definitions/awsFilters"
+    denylist:
+      type: array
+      description: Specify the AWS filters used to filter the EC2 instances to ignore
+      x-omitempty: true
+      items:
+        $ref: "#/definitions/awsFilters"
+    server_slots_base:
+      type: integer
+      default: 10
+    server_slots_growth_type:
+      type: string
+      enum: [linear, exponential]
+      default: exponential
+    server_slots_growth_increment:
+      type: integer
+  example:
+    id: "0"
+    access_key_id: "****************L7GT"
+    secret_access_key: "****************soLl"
+    name: frontend-service
+    retry_timeout: 1
+    region: us-east-1
+    ipv4_address: private
+    enabled: true
+    allowlist:
+      - key: tag-key
+        value: "Instance:Having:This:Tag"
+    denylist:
+      - key: tag:Environment
+        value: development
+
+consul:
+  title: Consul server
+  description: Consul server configuration
+  type: object
+  required: [address, port, enabled, retry_timeout]
+  properties:
+    id:
+      type: string
+      x-nullable: true
+      pattern: '^[^\s]+$'
+      description: Auto generated ID.
+    address:
+      type: string
+      pattern: '^[^\s]+$'
+    port:
+      type: integer
+      minimum: 1
+      maximum: 65535
+    mode:
+      type: string
+      enum: [http, https]
+      default: http
+    token:
+      type: string
+      pattern: '^[^\s]+$'
+    enabled:
+      type: boolean
+    retry_timeout:
+      type: integer
+      minimum: 1
+      description: Duration in seconds in-between data pulling requests to the consul server
+    service_allowlist:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+        pattern: '^[^\s]+$'
+    service_denylist:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+        pattern: '^[^\s]+$'
+    server_slots_base:
+      type: integer
+      default: 10
+    server_slots_growth_type:
+      type: string
+      enum: [linear, exponential]
+      default: exponential
+    server_slots_growth_increment:
+      type: integer
+    description:
+      type: string
+    name:
+      type: string
+    namespace:
+      type: string
+    defaults:
+      type: string
+      description: Name of the defaults section to be used in backends created by this service
+    health_check_policy:
+      type: string
+      enum: [none, any, all, min]
+      default: none
+      description: |-
+        Defines the health check conditions required for each node to be considered valid for the service.
+          none: all nodes are considered valid
+          any: a node is considered valid if any one health check is 'passing'
+          all: a node is considered valid if all health checks are 'passing'
+          min: a node is considered valid if the number of 'passing' checks is greater or equal to the 'health_check_policy_min' value.
+            If the node has less health checks configured then 'health_check_policy_min' it is considered invalid.
+    health_check_policy_min:
+      type: integer
+      x-dependency:
+        health_check_policy:
+          value: min
+    service_name_regexp:
+      type: string
+      description: Regular expression used to filter services by name.
+  additionalProperties: false
+  example:
+    id: "0"
+    enabled: true
+    address: 127.0.0.1
+    port: 90
+    retry_timeout: 10

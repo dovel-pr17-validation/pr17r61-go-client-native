@@ -1,0 +1,103 @@
+---
+crt_store:
+  title: Certificate Store
+  description: Storage mechanism to load and store certificates used in the configuration
+  x-go-name: CrtStore
+  allOf:
+    - $ref: "#/definitions/crt_store_base"
+    - type: object
+      properties:
+        crt_loads:
+          additionalProperties:
+            $ref: "#/definitions/crt_load"
+crt_store_base:
+  title: Certificate Store
+  description: Storage mechanism to load and store certificates used in the configuration
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_]+$'
+      x-nullable: false
+    crt_base:
+      type: string
+      description: Default directory to fetch SSL certificates from
+    key_base:
+      type: string
+      description: Default directory to fetch SSL private keys from
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+crt_load:
+  title: Certificate load action
+  description: Loads a certificate from a store with options
+  type: object
+  required:
+    - certificate
+  properties:
+    certificate:
+      type: string
+      description: Certificate filename
+      x-nullable: false
+    acme:
+      type: string
+      description: ACME section name to use
+    alias:
+      type: string
+      description: Certificate alias
+    domains:
+      type: array
+      items:
+        type: string
+      description: List of domains used to generate the certificate with ACME
+      x-omitempty: true
+      x-go-name: Domains
+    ips:
+      type: array
+      items:
+        type: string
+      description: List of IP addresses included as IP SANs in the ACME certificate
+      x-omitempty: true
+      x-go-name: IPs
+    jwt:
+      type: string
+      enum: [enabled, disabled]
+      description: Allow this certificate to be used for JWT validation or decryption (default disabled)
+    generate_dummy:
+      type: string
+      enum: [enabled, disabled]
+      description: Generate a private key and self-signed certificate at configuration parsing time (default disabled)
+    keytype:
+      type: string
+      enum: [RSA, ECDSA]
+      description: Private key type used with generate-dummy (default RSA)
+    bits:
+      type: integer
+      x-omitempty: true
+      x-nullable: true
+      description: Number of bits used with generate-dummy and the RSA key type (default 2048)
+    curves:
+      type: string
+      description: Curves used with generate-dummy and the ECDSA key type (default P-384)
+    key:
+      type: string
+      description: Private key filename
+    ocsp:
+      type: string
+      description: OCSP response filename
+    issuer:
+      type: string
+      description: OCSP issuer filename
+    sctl:
+      type: string
+      description: Signed Certificate Timestamp List filename
+    ocsp_update:
+      type: string
+      enum: [enabled, disabled]
+      description: Automatic OCSP response update
+    metadata:
+      additionalProperties:
+        type: object

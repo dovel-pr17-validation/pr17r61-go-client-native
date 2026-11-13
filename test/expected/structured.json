@@ -1,0 +1,3897 @@
+{
+    "global": {
+        "h1_case_adjust": [
+            {
+                "from": "host",
+                "to": "Host"
+            },
+            {
+                "from": "content-type",
+                "to": "Content-Type"
+            }
+        ],
+        "module-loads": [
+            {
+                "value": "modsecurity.so"
+            },
+            {
+                "value": "test.so"
+            }
+        ],
+        "no_quic": true,
+        "performance_options": {
+            "busy_polling": true,
+            "max_spread_checks": 1,
+            "maxcompcpuusage": 4,
+            "maxcomprate": 3,
+            "maxconn": 2000,
+            "maxconnrate": 2,
+            "maxpipes": 5,
+            "maxsessrate": 6,
+            "maxzlibmem": 9,
+            "noepoll": true,
+            "noevports": true,
+            "nogetaddrinfo": true,
+            "nokqueue": true,
+            "nopoll": true,
+            "noreuseport": true,
+            "nosplice": true,
+            "no_memory_trimming": true,
+            "profiling_tasks": "enabled",
+            "server_state_base": "/path",
+            "server_state_file": "serverstatefile",
+            "spread_checks": 10,
+            "fd_hard_limit": 4096,
+            "thread_hard_limit": 77,
+            "noktls": true
+        },
+        "ssl_options": {
+            "engines": [
+                {
+                    "algorithms": "",
+                    "name": "first"
+                },
+                {
+                    "algorithms": "RSA,DSA,DH,EC,RAND",
+                    "name": "second"
+                },
+                {
+                    "algorithms": "CIPHERS,DIGESTS,PKEY,PKEY_CRYPTO,PKEY_ASN1",
+                    "name": "third"
+                }
+            ],
+            "acme_scheduler": "off",
+            "ca_base": "/etc/ssl/certs",
+            "crt_base": "/etc/ssl/private",
+            "default_bind_ciphers": "ECDH+AESGCM:ECDH+CHACHA20",
+            "default_bind_ciphersuites": "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384",
+            "default_bind_client_sigalgs": "ECDSA+SHA256:RSA+SHA256",
+            "default_bind_curves": "X25519:P-256",
+            "default_bind_sigalgs": "RSA+SHA256",
+            "default_server_ciphers": "ECDH+AESGCM:ECDH+CHACHA20:ECDH+AES256:ECDH+AES128:!aNULL:!SHA1:!AESCCM",
+            "default_server_ciphersuites": "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256",
+            "default_server_client_sigalgs": "ECDSA+SHA256:RSA+SHA256",
+            "default_server_curves": "brainpoolP384r1,brainpoolP512r1",
+            "default_server_options": "ssl-min-ver TLSv1.1 no-tls-tickets",
+            "default_server_sigalgs": "RSA+SHA256",
+            "dh_param_file": "ssl-dh-param-file.txt",
+            "load_extra_files": "bundle",
+            "load_extra_del_ext": true,
+            "mode_async": "enabled",
+            "propquery": "provider",
+            "provider": "default",
+            "provider_path": "test",
+            "server_verify": "required",
+            "skip_self_issued_ca": true,
+            "issuers_chain_path": "issuers-chain-path",
+            "maxsslconn": 7,
+            "maxsslrate": 8,
+            "security_level": 3,
+            "passphrase_cmd": "test.sh -haproxy"
+        },
+        "environment_options": {
+            "presetenv": [
+                {
+                    "name": "first",
+                    "value": "order"
+                }
+            ],
+            "setenv": [
+                {
+                    "name": "third",
+                    "value": "sister"
+                }
+            ],
+            "resetenv": "first second",
+            "unsetenv": "third fourth"
+        },
+        "runtime_apis": [
+            {
+                "level": "admin",
+                "mode": "0660",
+                "address": "/var/run/haproxy.sock"
+            }
+        ],
+        "set_var_fmt": [
+            {
+                "format": "\"%pid|%t\"",
+                "name": "proc.bootid"
+            },
+            {
+                "format": "\"primary\"",
+                "name": "proc.current_state"
+            }
+        ],
+        "set_var": [
+            {
+                "expr": "str(primary)",
+                "name": "proc.current_state"
+            },
+            {
+                "expr": "int(100)",
+                "name": "proc.prio"
+            },
+            {
+                "expr": "int(200),sub(proc.prio)",
+                "name": "proc.threshold"
+            }
+        ],
+        "thread_group_lines": [
+            {
+                "group": "first",
+                "num_or_range": "1-16"
+            }
+        ],
+        "debug_options": {
+            "anonkey": 25,
+            "quiet": true,
+            "stress_level": 5,
+            "zero_warning": true
+        },
+        "anonkey": 25,
+        "chroot": "/var/www",
+        "close_spread_time": 1000,
+        "cluster_secret": "my_secret",
+        "cpu_policy": "none",
+        "cpu_set": [
+            {
+                "directive": "reset"
+            },
+            {
+                "directive": "only-node",
+                "set": "0"
+            },
+            {
+                "directive": "drop-core",
+                "set": "5-9"
+            }
+        ],
+        "daemon": true,
+        "default_path": {
+            "path": "/some/path",
+            "type": "origin"
+        },
+        "description": "description",
+        "device_atlas_options": {
+            "json_file": "atlas.json",
+            "log_level": "1",
+            "properties_cookie": "chocolate",
+            "separator": "-"
+        },
+        "dns_accept_family": "ipv4,ipv6",
+        "shm_stats_file": "some_file",
+        "shm_stats_file_max_objects": 100,
+        "expose_deprecated_directives": true,
+        "expose_experimental_directives": true,
+        "external_check": true,
+        "fifty_one_degrees_options": {
+            "cache_size": 51,
+            "data_file": "51.file",
+            "property_name_list": "first second third fourth fifth",
+            "property_separator": "/"
+        },
+        "fingerprint_ssl_bufsize": 56,
+        "force_cfg_parser_pause": 1000,
+        "gid": 1,
+        "grace": 10000,
+        "group": "anderson",
+        "h1_case_adjust_file": "/etc/headers.adjust",
+        "h1_accept_payload_with_any_method": true,
+        "h1_do_not_close_on_insecure_transfer_encoding": true,
+        "h2_workaround_bogus_websocket_clients": true,
+        "hard_stop_after": 2000,
+        "http_client_options": {
+            "resolvers_disabled": "enabled",
+            "resolvers_id": "resolver_1",
+            "resolvers_prefer": "ipv4",
+            "retries": 3,
+            "ssl_ca_file": "my_test_file.ca",
+            "ssl_verify": "none",
+            "timeout_connect": 2000
+        },
+        "insecure_fork_wanted": true,
+        "insecure_setuid_wanted": true,
+        "jwt_options": {
+            "allow_none_alg": true,
+            "decrypt_alg_list": "ALL:!ECDH-ES",
+            "decrypt_enc_list": "A128GCM:A192GCM:A256GCM"
+        },
+        "limited_quic": true,
+        "localpeer": "test",
+        "lua_options": {
+            "load_per_thread": "file.ext",
+            "loads": [
+                {
+                    "file": "/etc/foo.lua"
+                },
+                {
+                    "file": "/etc/bar.lua"
+                }
+            ],
+            "prepend_path": [
+                {
+                    "path": "/usr/share/haproxy-lua/?/init.lua"
+                },
+                {
+                    "path": "/usr/share/haproxy-lua/?.lua",
+                    "type": "cpath"
+                }
+            ]
+        },
+        "maxmind_cache_size": 200000,
+        "maxmind_debug": true,
+        "maxmind_load": {
+            "maxmind_dbs": [
+                {
+                    "key": "CITY",
+                    "path": "/etc/hapee-2.5/GeoIP2-City.mmdb"
+                },
+                {
+                    "key": "ISP",
+                    "path": "/etc/hapee-2.5/GeoIP2-ISP.mmdb"
+                }
+            ],
+            "mlock_max": 512000000
+        },
+        "maxmind_update": {
+            "maxmind_urls": [
+                {
+                    "key": "CITY",
+                    "url": "http://192.168.122.1/GeoIP2-City.mmdb"
+                },
+                {
+                    "key": "ISP",
+                    "url": "http://192.168.122.1/GeoIP2-ISP.mmdb"
+                }
+            ],
+            "checksum": true,
+            "delay": 86400000,
+            "hash": true,
+            "log": true
+        },
+        "modsecurity-deny-blocking-io": true,
+        "module-path": "/tmp/modules/path",
+        "mworker_max_reloads": 5,
+        "nbthread": 128,
+        "max_threads_per_group": 16,
+        "cpu_affinity": {
+            "affinity": "per-group",
+            "argument": "auto"
+        },
+        "node": "node",
+        "numa_cpu_mapping": "enabled",
+        "pidfile": "pidfile.text",
+        "pp2_never_send_local": true,
+        "prealloc_fd": true,
+        "quiet": true,
+        "set_dumpable": true,
+        "setcap": "cap_net_raw,cap_net_bind_service",
+        "stats_file": "/var/haproxy/my-stats",
+        "stats_maxconn": 20,
+        "stats_calculate_max_counters": "enabled",
+        "strict_limits": true,
+        "thread_groups": 1,
+        "tune_options": {
+            "applet_zero_copy_forwarding": "disabled",
+            "cli_max_payload_size": 262144,
+            "comp_maxlevel": 14,
+            "defaults_purge": true,
+            "disable_fast_forward": true,
+            "disable_zero_copy_forwarding": true,
+            "epoll_mask_events": [
+                "err",
+                "hup",
+                "rdhup"
+            ],
+            "events_max_events_at_once": 10,
+            "fail_alloc": true,
+            "glitches_kill_cpu_usage": 75,
+            "fd_edge_triggered": "enabled",
+            "h1_be_glitches_threshold": 2,
+            "h1_fe_glitches_threshold": 15,
+            "h1_zero_copy_fwd_recv": "enabled",
+            "h1_zero_copy_fwd_send": "enabled",
+            "h2_be_glitches_threshold": 16,
+            "h2_be_initial_window_size": 201,
+            "h2_be_max_concurrent_streams": 202,
+            "h2_be_max_frames_at_once": 32,
+            "h2_be_rxbuf": 16384,
+            "h2_fe_glitches_threshold": 8,
+            "h2_fe_initial_window_size": 203,
+            "h2_fe_max_concurrent_streams": 204,
+            "h2_fe_max_frames_at_once": 64,
+            "h2_fe_max_rst_at_once": 5,
+            "h2_fe_rxbuf": 8192,
+            "h2_fe_max_total_streams": 8192,
+            "h2_header_table_size": 15,
+            "h2_initial_window_size": 16,
+            "h2_log_errors": "connection",
+            "h2_max_concurrent_streams": 17,
+            "h2_max_frame_size": 18,
+            "h2_zero_copy_fwd_send": "enabled",
+            "http_cookielen": 19,
+            "http_logurilen": 20,
+            "http_maxhdr": 21,
+            "idle_pool_shared": "enabled",
+            "idletimer": 22,
+            "listener_default_shards": "by-process",
+            "listener_multi_queue": "enabled",
+            "max_checks_per_thread": 0,
+            "max_rules_at_once": 60,
+            "maxaccept": 28,
+            "maxpollevents": 29,
+            "maxrewrite": 30,
+            "memory_hot_size": 56,
+            "notsent_lowat_client": 32768,
+            "notsent_lowat_server": 16384,
+            "pattern_cache_size": 31,
+            "peers_max_updates_at_once": 200,
+            "pool_high_fd_ratio": 33,
+            "pool_low_fd_ratio": 34,
+            "pt_zero_copy_forwarding": "enabled",
+            "renice_runtime": -10,
+            "renice_startup": 5,
+            "ring_queues": 8,
+            "runqueue_depth": 38,
+            "sched_low_latency": "enabled",
+            "stick_counters": 50,
+            "streams_elasticity": 120,
+            "takeover_other_tg_connections": "none"
+        },
+        "tune_ssl_default_dh_param": 45,
+        "uid": 1,
+        "ulimit_n": 10,
+        "user": "thomas",
+        "warn_blocked_traffic_after": 50,
+        "wurfl_options": {
+            "cache_size": 64,
+            "data_file": "path",
+            "information_list": "wurfl_id,wurfl_root_id,wurfl_isdevroot,wurfl_useragent,wurfl_api_version,wurfl_info,wurfl_last_load_time,wurfl_normalized_useragent",
+            "information_list_separator": ",",
+            "patch_file": "path1,path2"
+        },
+        "log_target_list": [
+            {
+                "address": "127.0.0.1:10001",
+                "facility": "local0",
+                "sample_range": "1",
+                "sample_size": 4
+            },
+            {
+                "address": "127.0.0.1:10002",
+                "facility": "local0",
+                "sample_range": "2",
+                "sample_size": 4
+            }
+        ],
+        "profiling.tasks": "enabled",
+        "harden": {
+            "reject_privileged_ports": {
+                "tcp": "enabled"
+            }
+        },
+        "http_err_codes": [
+            {
+                "value": "400,402-444,446-480,490 -450 +500"
+            },
+            {
+                "value": "+501,505"
+            }
+        ],
+        "http_fail_codes": [
+            {
+                "value": "400,402-444,446-480,490 -450 +500"
+            },
+            {
+                "value": "+501,505"
+            }
+        ],
+        "ocsp_update_options": {
+            "disable": false,
+            "mindelay": 7,
+            "maxdelay": 10,
+            "httpproxy": {
+                "address": "127.0.0.1",
+                "port": 123
+            },
+            "mode": "enabled"
+        },
+        "tune_buffer_options": {
+            "rcvbuf_backend": 1024,
+            "rcvbuf_client": 35,
+            "rcvbuf_frontend": 2048,
+            "rcvbuf_server": 36,
+            "recv_enough": 37,
+            "sndbuf_backend": 1024,
+            "sndbuf_client": 39,
+            "sndbuf_frontend": 2048,
+            "sndbuf_server": 40,
+            "pipesize": 32,
+            "buffers_limit": 11,
+            "buffers_reserve": 12,
+            "bufsize": 13,
+            "bufsize_large": 65536,
+            "bufsize_small": 8192
+        },
+        "tune_lua_options": {
+            "bool_sample_conversion": "normal",
+            "burst_timeout": 205,
+            "forced_yield": 23,
+            "log_loggers": "enabled",
+            "log_stderr": "auto",
+            "maxmem": 65536,
+            "openlibs": "string,math,table,utf8",
+            "service_timeout": 27,
+            "session_timeout": 25,
+            "task_timeout": 26
+        },
+        "tune_quic_options": {
+            "frontend_conn_tx_buffers_limit": 10,
+            "frontend_max_idle_timeout": 10000,
+            "frontend_max_streams_bidi": 100,
+            "frontend_stream_max_total": 1000,
+            "max_frame_loss": 5,
+            "reorder_ratio": 75,
+            "retry_threshold": 5,
+            "socket_owner": "connection",
+            "zero_copy_fwd_send": "enabled",
+            "frontend_max_tx_memory": 1024
+        },
+        "tune_ssl_options": {
+            "cachesize": 41,
+            "certificate_compression": "disabled",
+            "capture_buffer_size": 47,
+            "ctx_cache_size": 46,
+            "default_dh_param": 45,
+            "force_private_cache": true,
+            "keylog": "enabled",
+            "lifetime": 43,
+            "maxrecord": 44,
+            "ocsp_update_max_delay": 48,
+            "ocsp_update_min_delay": 49
+        },
+        "tune_vars_options": {
+            "global_max_size": 51,
+            "proc_max_size": 52,
+            "reqres_max_size": 53,
+            "sess_max_size": 54,
+            "txn_max_size": 55
+        },
+        "tune_zlib_options": {
+            "memlevel": 8,
+            "windowsize": 10
+        }
+    },
+    "backends": {
+        "test": {
+            "error_files": [
+                {
+                    "code": 403,
+                    "file": "/test/403.html"
+                },
+                {
+                    "code": 500,
+                    "file": "/test/500.html"
+                },
+                {
+                    "code": 429,
+                    "file": "/test/429.html"
+                }
+            ],
+            "errorfiles_from_http_errors": [
+                {
+                    "codes": [
+                        404,
+                        401,
+                        500
+                    ],
+                    "name": "my_errors"
+                },
+                {
+                    "name": "other_errors"
+                },
+                {
+                    "codes": [
+                        501
+                    ],
+                    "name": "another_errors"
+                }
+            ],
+            "accept_invalid_http_response": "disabled",
+            "accept_unsafe_violations_in_http_response": "disabled",
+            "adv_check": "httpchk",
+            "balance": {
+                "algorithm": "roundrobin"
+            },
+            "check_timeout": 2000,
+            "checkcache": "enabled",
+            "compression": {
+                "types": [
+                    "application/json",
+                    "text/plain"
+                ],
+                "direction": "both",
+                "types-req": [
+                    "text/plain",
+                    "application/json"
+                ],
+                "types-res": [
+                    "text/plain"
+                ],
+                "algo-req": "raw-deflate",
+                "algos-res": [
+                    "raw-deflate",
+                    "identity"
+                ],
+                "minsize_req": 1024,
+                "minsize_res": 2048
+            },
+            "cookie": {
+                "httponly": true,
+                "name": "BLA",
+                "nocache": true,
+                "type": "rewrite"
+            },
+            "default_server": {
+                "fall": 2,
+                "health_check_port": 8888,
+                "inter": 5000,
+                "log-bufsize": 6,
+                "pool_low_conn": 128,
+                "rise": 4,
+                "ws": "auto",
+                "sslv3": "enabled",
+                "force_sslv3": "enabled"
+            },
+            "description": "this is a backend description",
+            "email_alert": {
+                "from": "prod01@example.com",
+                "level": "warning",
+                "mailers": "localmailer1",
+                "myhostname": "prod01",
+                "to": "sre@example.com"
+            },
+            "enabled": true,
+            "errorloc302": {
+                "code": 404,
+                "url": "http://www.myawesomesite.com/not_found"
+            },
+            "errorloc303": {
+                "code": 404,
+                "url": "http://www.myawesomesite.com/not_found"
+            },
+            "external_check": "enabled",
+            "external_check_command": "/bin/false",
+            "force_persist_list": [
+                {
+                    "cond": "unless",
+                    "cond_test": "acl-name-2"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "acl-name-3"
+                }
+            ],
+            "forwardfor": {
+                "enabled": "enabled",
+                "header": "X-Forwarded-For"
+            },
+            "fullconn": 11,
+            "guid": "guid-example",
+            "h1_case_adjust_bogus_server": "disabled",
+            "hash_type": {
+                "function": "sdbm",
+                "method": "consistent",
+                "modifier": "avalanche"
+            },
+            "hash_balance_factor": 150,
+            "hash_preserve_affinity": "always",
+            "http-check": {
+                "type": "connect"
+            },
+            "http-drop-request-trailers": "enabled",
+            "http-keep-alive": "enabled",
+            "http_connection_mode": "http-keep-alive",
+            "http_restrict_req_hdr_names": "preserve",
+            "http_send_name_header": "X-My-Awesome-Header",
+            "httpchk_params": {
+                "method": "HEAD",
+                "uri": "/",
+                "version": "HTTP/1.1",
+                "host": "www"
+            },
+            "id": 456,
+            "ignore_persist_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "acl-name"
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "local_dst"
+                }
+            ],
+            "independent_streams": "enabled",
+            "load_server_state_from_file": "local",
+            "log_tag": "bla",
+            "max_keep_alive_queue": 101,
+            "metadata": {
+                "comment": "my comment"
+            },
+            "mode": "http",
+            "name": "test",
+            "nolinger": "enabled",
+            "originalto": {
+                "enabled": "enabled",
+                "header": "X-Client-Dst"
+            },
+            "persist": "enabled",
+            "persist_rule": {
+                "rdp_cookie_name": "name",
+                "type": "rdp-cookie"
+            },
+            "prefer_last_server": "enabled",
+            "retry_on": "504 505",
+            "server_fin_timeout": 1000,
+            "server_state_file_name": "use-backend-name",
+            "server_timeout": 3000,
+            "source": {
+                "address": "192.168.1.222",
+                "hdr": "hdr",
+                "occ": "occ",
+                "usesrc": "hdr_ip"
+            },
+            "splice_auto": "enabled",
+            "splice_request": "enabled",
+            "splice_response": "enabled",
+            "spop_check": "enabled",
+            "srvtcpka": "enabled",
+            "srvtcpka_cnt": 10,
+            "srvtcpka_idle": 10000,
+            "srvtcpka_intvl": 10000,
+            "stats_options": {
+                "stats_auths": [
+                    {
+                        "passwd": "AdMiN123",
+                        "user": "admin"
+                    },
+                    {
+                        "passwd": "AdMiN1234",
+                        "user": "admin2"
+                    }
+                ],
+                "stats_http_requests": [
+                    {
+                        "realm": "HAProxy\\\\ Statistics",
+                        "type": "auth"
+                    },
+                    {
+                        "cond": "if",
+                        "cond_test": "something",
+                        "type": "allow"
+                    }
+                ],
+                "stats_realm": true,
+                "stats_realm_realm": "HAProxy\\\\ Statistics",
+                "stats_show_modules": true,
+                "stats_show_node_name": null
+            },
+            "tarpit_timeout": 2000,
+            "tcp_smart_connect": "enabled",
+            "tcpka": "enabled",
+            "transparent": "enabled",
+            "tunnel_timeout": 5000,
+            "use_fcgi_app": "app-name",
+            "http_check_list": [
+                {
+                    "type": "connect",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "headers": [
+                        {
+                            "fmt": "haproxy.1wt.eu",
+                            "name": "host"
+                        }
+                    ],
+                    "method": "GET",
+                    "type": "send",
+                    "uri": "/",
+                    "version": "HTTP/1.1"
+                },
+                {
+                    "match": "status",
+                    "pattern": "200-399",
+                    "type": "expect"
+                },
+                {
+                    "port": 443,
+                    "sni": "haproxy.1wt.eu",
+                    "ssl": true,
+                    "type": "connect"
+                },
+                {
+                    "match": "status",
+                    "pattern": "200,201,300-310",
+                    "type": "expect"
+                },
+                {
+                    "match": "header",
+                    "pattern": "name \"set-cookie\" value -m beg \"sessid=\"",
+                    "type": "expect"
+                },
+                {
+                    "exclamation_mark": true,
+                    "match": "string",
+                    "pattern": "SQL\\ Error",
+                    "type": "expect"
+                },
+                {
+                    "exclamation_mark": true,
+                    "match": "rstatus",
+                    "pattern": "^5",
+                    "type": "expect"
+                },
+                {
+                    "match": "rstring",
+                    "pattern": "\u003c!--tag:[0-9a-f]*--\u003e\u003c/html\u003e",
+                    "type": "expect"
+                },
+                {
+                    "type": "unset-var",
+                    "var_name": "port",
+                    "var_scope": "check"
+                },
+                {
+                    "type": "set-var",
+                    "var_expr": "int(1234)",
+                    "var_name": "port",
+                    "var_scope": "check"
+                },
+                {
+                    "type": "set-var-fmt",
+                    "var_expr": "int(1234)",
+                    "var_name": "port",
+                    "var_scope": "check"
+                },
+                {
+                    "type": "send-state"
+                },
+                {
+                    "type": "disable-on-404"
+                }
+            ],
+            "http_request_rule_list": [
+                {
+                    "expr": "hdr(x-dst)",
+                    "type": "set-dst",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "expr": "int(4000)",
+                    "type": "set-dst-port"
+                },
+                {
+                    "type": "set-uri",
+                    "uri-fmt": "%[url,regsub(^/metrics/,/,)]",
+                    "cond": "if",
+                    "cond_test": "{ path_beg /metrics }"
+                },
+                {
+                    "type": "pause",
+                    "expr": "20s"
+                },
+                {
+                    "type": "pause",
+                    "expr": "%[calc((sc_conn_rate(0) - 30) * 10)]",
+                    "cond": "if",
+                    "cond_test": "{ sc_conn_rate(0) gt 30 }",
+                    "metadata": {
+                        "comment": "delay according to conn rate"
+                    }
+                }
+            ],
+            "http_response_rule_list": [
+                {
+                    "expr": "123",
+                    "type": "set-fc-mark",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "expr": "1",
+                    "type": "set-fc-tos",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "pause",
+                    "expr": "20s"
+                },
+                {
+                    "type": "pause",
+                    "expr": "%[calc((sc_conn_rate(0) - 30) * 10)]",
+                    "cond": "if",
+                    "cond_test": "{ sc_conn_rate(0) gt 30 }",
+                    "metadata": {
+                        "comment": "delay according to conn rate"
+                    }
+                }
+            ],
+            "server_switching_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "target_server": "webserv",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "TRUE",
+                    "target_server": "webserv2"
+                }
+            ],
+            "stick_rule_list": [
+                {
+                    "pattern": "src",
+                    "table": "test",
+                    "type": "store-request",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "pattern": "src",
+                    "table": "test",
+                    "type": "match"
+                },
+                {
+                    "pattern": "src",
+                    "table": "test",
+                    "type": "on"
+                },
+                {
+                    "pattern": "src",
+                    "type": "store-response"
+                },
+                {
+                    "pattern": "src_port",
+                    "table": "test_port",
+                    "type": "store-response"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "pattern": "src",
+                    "table": "test",
+                    "type": "store-response"
+                }
+            ],
+            "tcp_response_rule_list": [
+                {
+                    "action": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "content",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "action": "reject",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "lua",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "1m",
+                    "bandwidth_limit_name": "my-limit",
+                    "bandwidth_limit_period": "10s",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "2m",
+                    "bandwidth_limit_name": "my-limit-reverse",
+                    "bandwidth_limit_period": "20s",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "3m",
+                    "bandwidth_limit_name": "my-limit-cond",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "close",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "sc-add-gpc",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 1,
+                    "type": "content"
+                },
+                {
+                    "action": "sc-inc-gpc0",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "type": "content"
+                },
+                {
+                    "action": "sc-inc-gpc1",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 2,
+                    "type": "content"
+                },
+                {
+                    "action": "sc-set-gpt0",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "hdr(Host),lower",
+                    "sc_id": 3,
+                    "type": "content"
+                },
+                {
+                    "action": "send-spoe-group",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "spoe_engine": "engine",
+                    "spoe_group": "group",
+                    "type": "content"
+                },
+                {
+                    "action": "set-log-level",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "log_level": "silent",
+                    "type": "content"
+                },
+                {
+                    "action": "set-mark",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "mark_value": "0x1Ab",
+                    "type": "content"
+                },
+                {
+                    "action": "set-nice",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "nice_value": 1,
+                    "type": "content"
+                },
+                {
+                    "action": "set-tos",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "tos_value": "2",
+                    "type": "content"
+                },
+                {
+                    "action": "silent-drop",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "unset-var",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content",
+                    "var_name": "my_var",
+                    "var_scope": "req"
+                },
+                {
+                    "action": "set-fc-mark",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "content",
+                    "expr": "7676"
+                },
+                {
+                    "action": "set-fc-tos",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content",
+                    "expr": "0xab"
+                },
+                {
+                    "type": "content",
+                    "action": "sc-set-gpt",
+                    "sc_id": 1,
+                    "sc_idx": 2,
+                    "sc_int": 1234
+                },
+                {
+                    "type": "content",
+                    "action": "do-log"
+                },
+                {
+                    "type": "content",
+                    "action": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                }
+            ],
+            "server_templates": {
+                "site": {
+                    "backup": "enabled",
+                    "check": "enabled",
+                    "fqdn": "google.com",
+                    "num_or_range": "1-10",
+                    "port": 8080,
+                    "prefix": "site"
+                },
+                "srv": {
+                    "check": "enabled",
+                    "fqdn": "google.com",
+                    "num_or_range": "1-3",
+                    "port": 80,
+                    "prefix": "srv",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                "test": {
+                    "backup": "enabled",
+                    "check": "enabled",
+                    "fqdn": "test.com",
+                    "num_or_range": "5",
+                    "prefix": "test"
+                },
+                "website": {
+                    "backup": "disabled",
+                    "check": "enabled",
+                    "fqdn": "google.com",
+                    "num_or_range": "10-100",
+                    "port": 443,
+                    "prefix": "website"
+                }
+            },
+            "servers": {
+                "webserv": {
+                    "client_sigalgs": "ECDSA+SHA256:RSA+SHA256",
+                    "cookie": "BLAH",
+                    "curves": "secp384r1",
+                    "inter": 2000,
+                    "log-bufsize": 10,
+                    "maxconn": 1000,
+                    "pool_low_conn": 128,
+                    "pool_purge_delay": 10000,
+                    "proxy-v2-options": [
+                        "authority",
+                        "crc32c"
+                    ],
+                    "set-proxy-v2-tlv-fmt": {
+                        "id": "0x20",
+                        "value": "%[fc_pp_tlv(0x20)]"
+                    },
+                    "sigalgs": "ECDSA+SHA256",
+                    "renegotiate": "disabled",
+                    "slowstart": 6000,
+                    "ssl": "enabled",
+                    "tcp_ut": 2000,
+                    "weight": 10,
+                    "ws": "h1",
+                    "address": "192.168.1.1",
+                    "id": 1234,
+                    "name": "webserv",
+                    "port": 9200,
+                    "metadata": {
+                        "comment": "my comment"
+                    },
+                    "init-state": "fully-up",
+                    "idle_ping": 10000,
+                    "check-reuse-pool": "enabled",
+                    "strict-maxconn": true,
+                    "tcp_md5sig": "secretpass",
+                    "sni_auto": "enabled",
+                    "check_sni_auto": "enabled",
+                    "ktls": "on"
+                },
+                "webserv2": {
+                    "cookie": "BLAH",
+                    "inter": 2000,
+                    "maxconn": 1000,
+                    "pool_low_conn": 128,
+                    "proxy-v2-options": [
+                        "authority",
+                        "crc32c"
+                    ],
+                    "slowstart": 6000,
+                    "ssl": "enabled",
+                    "weight": 10,
+                    "ws": "h1",
+                    "address": "192.168.1.1",
+                    "name": "webserv2",
+                    "port": 9300,
+                    "pool_conn_name": "apoolconnname",
+                    "hash_key": "akey",
+                    "metadata": {
+                        "comment": "my structured comment",
+                        "id": "my_random_id_for_server"
+                    },
+                    "check-reuse-pool": "disabled",
+                    "check-pool-conn-name": "foo",
+                    "renegotiate": "enabled",
+                    "cc": "cubic",
+                    "quic-cc-algo": "bbr",
+                    "quic_cc_algo_max_window": 1024
+                },
+                "webserv_noport": {
+                    "check": "enabled",
+                    "address": "192.168.1.2",
+                    "name": "webserv_noport"
+                }
+            }
+        },
+        "test_2": {
+            "metadata": {
+                "comment": "my comment"
+            },
+            "adv_check": "httpchk",
+            "balance": {
+                "algorithm": "roundrobin"
+            },
+            "check_timeout": 2000,
+            "checkcache": "disabled",
+            "cookie": {
+                "httponly": true,
+                "name": "BLA",
+                "nocache": true,
+                "type": "rewrite"
+            },
+            "default_server": {
+                "fall": 2,
+                "health_check_port": 8888,
+                "inter": 5000,
+                "rise": 4,
+                "slowstart": 6000,
+                "tlsv10": "disabled",
+                "force_tlsv10": "disabled"
+            },
+            "email_alert": {
+                "from": "prod01@example.com",
+                "level": "warning",
+                "mailers": "localmailer1",
+                "myhostname": "prod01",
+                "to": "sre@example.com"
+            },
+            "forwardfor": {
+                "enabled": "enabled",
+                "header": "X-Forwarded-For"
+            },
+            "from": "test_defaults_2",
+            "hash_type": {
+                "function": "sdbm",
+                "method": "consistent",
+                "modifier": "avalanche"
+            },
+            "http-check": {
+                "match": "rstatus",
+                "pattern": "some-pattern",
+                "type": "expect"
+            },
+            "http-keep-alive": "enabled",
+            "http_connection_mode": "http-keep-alive",
+            "httpchk_params": {
+                "method": "HEAD",
+                "uri": "/"
+            },
+            "independent_streams": "disabled",
+            "log_tag": "bla",
+            "mode": "http",
+            "name": "test_2",
+            "nolinger": "disabled",
+            "originalto": {
+                "enabled": "enabled",
+                "except": "127.0.0.1",
+                "header": "X-Client-Dst"
+            },
+            "persist": "disabled",
+            "prefer_last_server": "disabled",
+            "server_timeout": 3000,
+            "splice_auto": "disabled",
+            "splice_request": "disabled",
+            "splice_response": "disabled",
+            "spop_check": "disabled",
+            "srvtcpka": "enabled",
+            "srvtcpka_cnt": 10,
+            "srvtcpka_idle": 10000,
+            "srvtcpka_intvl": 10000,
+            "stats_options": {
+                "stats_auths": [
+                    {
+                        "passwd": "AdMiN123",
+                        "user": "admin"
+                    },
+                    {
+                        "passwd": "AdMiN1234",
+                        "user": "admin2"
+                    }
+                ],
+                "stats_http_requests": [
+                    {
+                        "realm": "HAProxy\\\\ Statistics",
+                        "type": "auth"
+                    },
+                    {
+                        "cond": "if",
+                        "cond_test": "something",
+                        "type": "allow"
+                    }
+                ],
+                "stats_realm": true,
+                "stats_realm_realm": "HAProxy\\\\ Statistics",
+                "stats_show_modules": true,
+                "stats_show_node_name": null
+            },
+            "stick_table": {
+                "expire": 3600000,
+                "peers": "mycluster",
+                "size": 102400,
+                "store": "http_req_rate(10s)",
+                "type": "ip",
+                "write_to": "t99",
+                "recv_only": true
+            },
+            "tcp_smart_connect": "disabled",
+            "tcpka": "enabled",
+            "transparent": "disabled",
+            "tunnel_timeout": 5000,
+            "http_check_list": [
+                {
+                    "match": "rstatus",
+                    "pattern": "some-pattern",
+                    "type": "expect"
+                }
+            ],
+            "http_error_rule_list": [
+                {
+                    "return_hdrs": [
+                        {
+                            "fmt": "value",
+                            "name": "Some-Header"
+                        }
+                    ],
+                    "return_content": "\"My content\"",
+                    "return_content_format": "string",
+                    "return_content_type": "\"text/plain\"",
+                    "status": 200,
+                    "type": "status",
+                    "metadata": {
+                        "comment": "my comment",
+                        "id": 123
+                    }
+                },
+                {
+                    "return_hdrs": [
+                        {
+                            "fmt": "value1",
+                            "name": "Additional-Header"
+                        },
+                        {
+                            "fmt": "value",
+                            "name": "Some-Header"
+                        }
+                    ],
+                    "return_content": "\"My content\"",
+                    "return_content_format": "string",
+                    "return_content_type": "application/json",
+                    "status": 503,
+                    "type": "status"
+                }
+            ]
+        }
+    },
+    "caches": {
+        "test": {
+            "max_age": 60,
+            "max_object_size": 8,
+            "max_secondary_entries": 10,
+            "name": "test",
+            "process_vary": true,
+            "total_max_size": 1024
+        }
+    },
+    "fcgi_apps": {
+        "test": {
+            "docroot": "/path/to/chroot",
+            "get_values": "enabled",
+            "index": "index.php",
+            "keep_conn": "disabled",
+            "log_stderrs": [
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2",
+                    "format": "rfc5424",
+                    "len": 8192,
+                    "level": "info",
+                    "minlevel": "debug",
+                    "sample": {
+                        "ranges": "1,2-5",
+                        "size": 6
+                    }
+                },
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2",
+                    "format": "rfc5424",
+                    "len": 8192,
+                    "level": "info",
+                    "sample": {
+                        "ranges": "1,2-5",
+                        "size": 6
+                    }
+                },
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2"
+                },
+                {
+                    "global": true
+                }
+            ],
+            "max_reqs": 1024,
+            "mpxs_conns": "disabled",
+            "name": "test",
+            "pass_headers": [
+                {
+                    "cond": "unless",
+                    "cond_test": "acl",
+                    "name": "x-header"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "acl",
+                    "name": "x-header"
+                },
+                {
+                    "name": "x-header"
+                }
+            ],
+            "path_info": "^(/.+\\.php)(/.*)?$",
+            "set_params": [
+                {
+                    "cond": "if",
+                    "cond_test": "acl",
+                    "format": "fmt",
+                    "name": "name"
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "acl",
+                    "format": "fmt",
+                    "name": "name"
+                },
+                {
+                    "format": "fmt",
+                    "name": "name"
+                }
+            ],
+            "acl_list": [
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src",
+                    "value": "0.0.0.0/7 224.0.0.0/3"
+                },
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src_port",
+                    "value": "0:1023"
+                },
+                {
+                    "acl_name": "local_dst",
+                    "criterion": "hdr(host)",
+                    "value": "-i localhost"
+                }
+            ]
+        },
+        "test_2": {
+            "docroot": "/path/to/chroot",
+            "get_values": "enabled",
+            "index": "index.php",
+            "keep_conn": "disabled",
+            "log_stderrs": [
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2",
+                    "format": "rfc5424",
+                    "len": 8192,
+                    "level": "info",
+                    "minlevel": "debug",
+                    "sample": {
+                        "ranges": "1,2-5",
+                        "size": 6
+                    }
+                },
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2",
+                    "format": "rfc5424",
+                    "len": 8192,
+                    "level": "info",
+                    "sample": {
+                        "ranges": "1,2-5",
+                        "size": 6
+                    }
+                },
+                {
+                    "address": "127.0.0.1:1515",
+                    "facility": "local2"
+                },
+                {
+                    "global": true
+                }
+            ],
+            "max_reqs": 1024,
+            "mpxs_conns": "disabled",
+            "name": "test_2",
+            "pass_headers": [
+                {
+                    "cond": "unless",
+                    "cond_test": "acl",
+                    "name": "x-header"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "acl",
+                    "name": "x-header"
+                },
+                {
+                    "name": "x-header"
+                }
+            ],
+            "path_info": "^(/.+\\.php)(/.*)?$",
+            "set_params": [
+                {
+                    "cond": "if",
+                    "cond_test": "acl",
+                    "format": "fmt",
+                    "name": "name"
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "acl",
+                    "format": "fmt",
+                    "name": "name"
+                },
+                {
+                    "format": "fmt",
+                    "name": "name"
+                }
+            ],
+            "acl_list": [
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src",
+                    "value": "0.0.0.0/7 224.0.0.0/3"
+                },
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src_port",
+                    "value": "0:1023"
+                },
+                {
+                    "acl_name": "local_dst",
+                    "criterion": "hdr(host)",
+                    "value": "-i localhost"
+                }
+            ]
+        }
+    },
+    "frontends": {
+        "test": {
+            "error_files": [
+                {
+                    "code": 403,
+                    "file": "/test/403.html"
+                },
+                {
+                    "code": 500,
+                    "file": "/test/500.html"
+                },
+                {
+                    "code": 429,
+                    "file": "/test/429.html"
+                }
+            ],
+            "accept_invalid_http_request": "disabled",
+            "accept_unsafe_violations_in_http_request": "disabled",
+            "backlog": 2048,
+            "client_fin_timeout": 1000,
+            "client_timeout": 4000,
+            "clitcpka": "enabled",
+            "clitcpka_cnt": 10,
+            "clitcpka_idle": 10000,
+            "clitcpka_intvl": 10000,
+            "compression": {
+                "algorithms": [
+                    "identity",
+                    "gzip"
+                ],
+                "offload": true,
+                "types": [
+                    "text/plain"
+                ],
+                "types-req": [
+                    "text/plain",
+                    "application/json"
+                ],
+                "types-res": [
+                    "text/plain"
+                ],
+                "algo-req": "raw-deflate",
+                "algos-res": [
+                    "raw-deflate",
+                    "identity"
+                ]
+            },
+            "contstats": "enabled",
+            "default_backend": "test",
+            "description": "this is a frontend description",
+            "disabled": true,
+            "dontlog_normal": "enabled",
+            "dontlognull": "enabled",
+            "email_alert": {
+                "from": "srv01@example.com",
+                "level": "warning",
+                "mailers": "localmailer1",
+                "myhostname": "srv01",
+                "to": "problems@example.com"
+            },
+            "error_log_format": "%T\\ %t\\ Some\\ Text",
+            "errorloc302": {
+                "code": 404,
+                "url": "http://www.myawesomesite.com/not_found"
+            },
+            "errorloc303": {
+                "code": 404,
+                "url": "http://www.myawesomesite.com/not_found"
+            },
+            "fingerprint": true,
+            "fingerprint_ssl": true,
+            "guid": "guid-example",
+            "h1_case_adjust_bogus_client": "disabled",
+            "http_connection_mode": "httpclose",
+            "http-drop-response-trailers": "enabled",
+            "http_ignore_probes": "enabled",
+            "http_keep_alive_timeout": 3000,
+            "http_no_delay": "enabled",
+            "http_request_timeout": 2000,
+            "http_restrict_req_hdr_names": "delete",
+            "http_use_proxy_header": "enabled",
+            "httplog": true,
+            "httpslog": "enabled",
+            "id": 123,
+            "idle_close_on_response": "enabled",
+            "independent_streams": "enabled",
+            "log_separate_errors": "enabled",
+            "log_tag": "bla",
+            "log_steps": [
+                "any"
+            ],
+            "maxconn": 2000,
+            "mode": "http",
+            "monitor_fail": {
+                "cond": "if",
+                "cond_test": "site_dead"
+            },
+            "monitor_uri": "/healthz",
+            "name": "test",
+            "nolinger": "enabled",
+            "originalto": {
+                "enabled": "enabled",
+                "except": "127.0.0.1"
+            },
+            "socket_stats": "enabled",
+            "splice_auto": "enabled",
+            "splice_request": "enabled",
+            "splice_response": "enabled",
+            "stats_options": {
+                "stats_auths": [
+                    {
+                        "passwd": "AdMiN123",
+                        "user": "admin"
+                    },
+                    {
+                        "passwd": "AdMiN1234",
+                        "user": "admin2"
+                    }
+                ],
+                "stats_realm": true,
+                "stats_realm_realm": "HAProxy\\\\ Statistics",
+                "stats_show_modules": true,
+                "stats_show_node_name": null,
+                "stats_refresh_delay": 10000
+            },
+            "tarpit_timeout": 2000,
+            "tcp_smart_accept": "enabled",
+            "tcpka": "enabled",
+            "unique_id_format": "%{+X}o%ci:%cp_%fi:%fp_%Ts_%rt:%pid",
+            "unique_id_header": "X-Unique-ID",
+            "abortonclose": "enabled",
+            "acl_list": [
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src",
+                    "value": "0.0.0.0/7 224.0.0.0/3",
+                    "metadata": {
+                        "comment": "test"
+                    }
+                },
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src_port",
+                    "value": "0:1023"
+                },
+                {
+                    "acl_name": "local_dst",
+                    "criterion": "hdr(host)",
+                    "value": "-i localhost"
+                },
+                {
+                    "acl_name": "waf_wafTest_drop",
+                    "criterion": "var(txn.wafTest.drop),bool"
+                }
+            ],
+            "backend_switching_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "name": "test_2"
+                },
+                {
+                    "name": "%[req.cookie(foo)]"
+                }
+            ],
+            "capture_list": [
+                {
+                    "length": 1,
+                    "type": "request"
+                }
+            ],
+            "filter_list": [
+                {
+                    "rule-files": null,
+                    "trace_hexdump": true,
+                    "trace_max_fwd": 100,
+                    "trace_name": "BEFORE-HTTP-COMP",
+                    "trace_rnd_parsing": true,
+                    "type": "trace"
+                },
+                {
+                    "rule-files": null,
+                    "type": "compression"
+                },
+                {
+                    "rule-files": null,
+                    "trace_name": "AFTER-HTTP-COMP",
+                    "trace_rnd_forwarding": true,
+                    "type": "trace"
+                },
+                {
+                    "app_name": "my-app",
+                    "rule-files": null,
+                    "type": "fcgi-app"
+                },
+                {
+                    "bandwidth_limit_name": "in",
+                    "default_limit": 1024,
+                    "default_period": 1000,
+                    "min_size": 1048576,
+                    "rule-files": null,
+                    "type": "bwlim-in"
+                },
+                {
+                    "bandwidth_limit_name": "out",
+                    "key": "name(arg1)",
+                    "limit": 1024,
+                    "min_size": 32,
+                    "rule-files": null,
+                    "table": "st_src_global",
+                    "type": "bwlim-out"
+                }
+            ],
+            "http_after_response_rule_list": [
+                {
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "map_valuefmt": "%[res.hdr(X-Value)]",
+                    "type": "set-map"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "type": "del-map"
+                },
+                {
+                    "acl_file": "map.lst",
+                    "acl_keyfmt": "%[src]",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "del-acl"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 1,
+                    "type": "sc-add-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "type": "sc-inc-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc1"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_expr": "hdr(Host),lower",
+                    "sc_id": 1,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 20,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "hdr_format": "\"max-age=31536000\"",
+                    "hdr_name": "Strict-Transport-Security",
+                    "type": "set-header"
+                },
+                {
+                    "type": "add-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_prefix": "x-"
+                },
+                {
+                    "type": "del-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_method": "beg"
+                },
+                {
+                    "type": "set-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_prefix": "x-"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "log_level": "silent",
+                    "type": "set-log-level"
+                },
+                {
+                    "hdr_format": "\\1;ip=%bi;\\2",
+                    "hdr_match": "(C=[^;]*);(.*)",
+                    "hdr_name": "Set-Cookie",
+                    "type": "replace-header"
+                },
+                {
+                    "hdr_format": "private",
+                    "hdr_match": "^public$",
+                    "hdr_name": "Cache-control",
+                    "type": "replace-value"
+                },
+                {
+                    "status": 503,
+                    "status_reason": "\"SlowDown\"",
+                    "type": "set-status"
+                },
+                {
+                    "type": "set-var",
+                    "var_expr": "res.hdr(location)",
+                    "var_name": "last_redir",
+                    "var_scope": "sess"
+                },
+                {
+                    "type": "unset-var",
+                    "var_name": "last_redir",
+                    "var_scope": "sess"
+                },
+                {
+                    "type": "sc-set-gpt",
+                    "sc_id": 1,
+                    "sc_idx": 2,
+                    "sc_expr": "hdr(port)",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "do-log"
+                },
+                {
+                    "type": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                }
+            ],
+            "http_error_rule_list": [
+                {
+                    "return_content": "/var/errors.file",
+                    "return_content_format": "lf-file",
+                    "return_content_type": "application/json",
+                    "status": 400,
+                    "type": "status"
+                }
+            ],
+            "http_request_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "src 192.168.0.0/16",
+                    "type": "allow"
+                },
+                {
+                    "hdr_format": "%[ssl_fc]",
+                    "hdr_name": "X-SSL",
+                    "type": "set-header"
+                },
+                {
+                    "type": "set-var",
+                    "var_expr": "req.fhdr(user-agent),lower",
+                    "var_name": "my_var",
+                    "var_scope": "req"
+                },
+                {
+                    "type": "set-var-fmt",
+                    "var_format": "%[src]:%[src_port]",
+                    "var_name": "from",
+                    "var_scope": "txn"
+                },
+                {
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "map_valuefmt": "%[req.hdr(X-Value)]",
+                    "type": "set-map"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "type": "del-map"
+                },
+                {
+                    "acl_file": "map.lst",
+                    "acl_keyfmt": "%[src]",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "del-acl"
+                },
+                {
+                    "cache_name": "cache-name",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "cache-use"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "disable-l7-retry"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "hint_format": "%[src]",
+                    "hint_name": "hint-name",
+                    "type": "early-hint"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "replace-uri",
+                    "uri-fmt": "https://1",
+                    "uri-match": "^http://(.*)"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 1,
+                    "type": "sc-add-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "type": "sc-inc-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc1"
+                },
+                {
+                    "expr": "hdr(Host),lower",
+                    "protocol": "ipv4",
+                    "resolvers": "mydns",
+                    "type": "do-resolve",
+                    "var_name": "txn.myip"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_expr": "hdr(Host),lower",
+                    "sc_id": 1,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 20,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "mark_value": "20",
+                    "type": "set-mark"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "nice_value": 20,
+                    "type": "set-nice"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "method_fmt": "POST",
+                    "type": "set-method"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "req.hdr(class)",
+                    "type": "set-priority-class"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "req.hdr(offset)",
+                    "type": "set-priority-offset"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "req.hdr(src)",
+                    "type": "set-src"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "req.hdr(port)",
+                    "type": "set-src-port"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "wait-for-handshake"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "tos_value": "0",
+                    "type": "set-tos"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "silent-drop"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "unset-var",
+                    "var_name": "my_var",
+                    "var_scope": "req"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "strict_mode": "on",
+                    "type": "strict-mode"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "lua"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "service_name": "svrs",
+                    "type": "use-service"
+                },
+                {
+                    "return_hdrs": [
+                        {
+                            "fmt": "value",
+                            "name": "Some-Header"
+                        }
+                    ],
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "return_content": "\"My content\"",
+                    "return_content_format": "string",
+                    "return_content_type": "\"text/plain\"",
+                    "return_status_code": 200,
+                    "type": "return"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "!{ ssl_fc }",
+                    "redir_type": "scheme",
+                    "redir_value": "https",
+                    "type": "redirect"
+                },
+                {
+                    "redir_code": 302,
+                    "redir_type": "location",
+                    "redir_value": "https://%[hdr(host),field(1,:)]:443%[capture.req.uri]",
+                    "type": "redirect"
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "src 192.168.0.0/16",
+                    "type": "deny"
+                },
+                {
+                    "deny_status": 400,
+                    "return_content": "/var/errors.file",
+                    "return_content_format": "lf-file",
+                    "return_content_type": "application/json",
+                    "type": "deny"
+                },
+                {
+                    "type": "wait-for-body",
+                    "wait_at_least": 102400,
+                    "wait_time": 20000
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "server",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "tunnel",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "client",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "10",
+                    "timeout_type": "connect",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "15",
+                    "timeout_type": "queue",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "30",
+                    "timeout_type": "tarpit",
+                    "type": "set-timeout"
+                },
+                {
+                    "bandwidth_limit_limit": "1m",
+                    "bandwidth_limit_name": "my-limit",
+                    "bandwidth_limit_period": "10s",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "bandwidth_limit_limit": "2m",
+                    "bandwidth_limit_name": "my-limit-reverse",
+                    "bandwidth_limit_period": "20s",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "bandwidth_limit_limit": "3m",
+                    "bandwidth_limit_name": "my-limit-cond",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 0,
+                    "track_sc_table": "tr0",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 1,
+                    "track_sc_table": "tr1",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 2,
+                    "track_sc_table": "tr2",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 5,
+                    "track_sc_table": "test",
+                    "type": "track-sc"
+                },
+                {
+                    "type": "set-bc-mark",
+                    "expr": "123",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "set-bc-tos",
+                    "expr": "0x22"
+                },
+                {
+                    "type": "set-fc-mark",
+                    "expr": "hdr(port)"
+                },
+                {
+                    "type": "set-fc-tos",
+                    "expr": "255",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "sc-set-gpt",
+                    "sc_id": 1,
+                    "sc_idx": 2,
+                    "sc_expr": "hdr(Host),lower",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "set-retries",
+                    "expr": "3"
+                },
+                {
+                    "type": "set-retries",
+                    "expr": "var(txn.retries)",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "do-log"
+                },
+                {
+                    "type": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "do-log",
+                    "log_profile": "my-prof",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "pause",
+                    "expr": "20s"
+                },
+                {
+                    "type": "pause",
+                    "expr": "%[calc((sc_conn_rate(0) - 30) * 10)]",
+                    "cond": "if",
+                    "cond_test": "{ sc_conn_rate(0) gt 30 }",
+                    "metadata": {
+                        "comment": "delay according to conn rate"
+                    }
+                }
+            ],
+            "http_response_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "src 192.168.0.0/16",
+                    "type": "allow"
+                },
+                {
+                    "hdr_format": "%[ssl_fc]",
+                    "hdr_name": "X-SSL",
+                    "type": "set-header"
+                },
+                {
+                    "type": "set-var",
+                    "var_expr": "req.fhdr(user-agent),lower",
+                    "var_name": "my_var",
+                    "var_scope": "req"
+                },
+                {
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "map_valuefmt": "%[res.hdr(X-Value)]",
+                    "type": "set-map"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "type": "del-map"
+                },
+                {
+                    "acl_file": "map.lst",
+                    "acl_keyfmt": "%[src]",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "del-acl"
+                },
+                {
+                    "cache_name": "cache-name",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "cache-store"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 1,
+                    "type": "sc-add-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "type": "sc-inc-gpc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "sc-inc-gpc1"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_expr": "hdr(Host),lower",
+                    "sc_id": 1,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_id": 1,
+                    "sc_int": 20,
+                    "type": "sc-set-gpt0"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "mark_value": "20",
+                    "type": "set-mark"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "nice_value": 20,
+                    "type": "set-nice"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "tos_value": "0",
+                    "type": "set-tos"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "silent-drop"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "unset-var",
+                    "var_name": "my_var",
+                    "var_scope": "req"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 0,
+                    "track_sc_table": "tr0",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 1,
+                    "track_sc_table": "tr1",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 2,
+                    "track_sc_table": "tr2",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "strict_mode": "on",
+                    "type": "strict-mode"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "lua"
+                },
+                {
+                    "deny_status": 400,
+                    "return_content": "/var/errors.file",
+                    "return_content_format": "lf-file",
+                    "return_content_type": "application/json",
+                    "type": "deny"
+                },
+                {
+                    "type": "wait-for-body",
+                    "wait_at_least": 102400,
+                    "wait_time": 20000
+                },
+                {
+                    "bandwidth_limit_limit": "1m",
+                    "bandwidth_limit_name": "my-limit",
+                    "bandwidth_limit_period": "10s",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "bandwidth_limit_limit": "2m",
+                    "bandwidth_limit_name": "my-limit-reverse",
+                    "bandwidth_limit_period": "20s",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "bandwidth_limit_limit": "3m",
+                    "bandwidth_limit_name": "my-limit-cond",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "set-bandwidth-limit"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 0,
+                    "track_sc_table": "tr0",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 1,
+                    "track_sc_table": "tr1",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 2,
+                    "track_sc_table": "tr2",
+                    "type": "track-sc"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_sc_key": "src",
+                    "track_sc_stick_counter": 5,
+                    "track_sc_table": "test",
+                    "type": "track-sc"
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "server",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "tunnel",
+                    "type": "set-timeout"
+                },
+                {
+                    "timeout": "20",
+                    "timeout_type": "client",
+                    "type": "set-timeout"
+                },
+                {
+                    "type": "sc-set-gpt",
+                    "sc_id": 1,
+                    "sc_idx": 2,
+                    "sc_int": 1234,
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "do-log"
+                },
+                {
+                    "type": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "pause",
+                    "expr": "20s"
+                },
+                {
+                    "type": "pause",
+                    "expr": "%[calc((sc_conn_rate(0) - 30) * 10)]",
+                    "cond": "if",
+                    "cond_test": "{ sc_conn_rate(0) gt 30 }",
+                    "metadata": {
+                        "comment": "delay according to conn rate"
+                    }
+                }
+            ],
+            "log_target_list": [
+                {
+                    "global": true
+                },
+                {
+                    "nolog": true
+                },
+                {
+                    "address": "127.0.0.1:514",
+                    "facility": "local0",
+                    "level": "notice",
+                    "minlevel": "notice"
+                }
+            ],
+            "tcp_request_rule_list": [
+                {
+                    "action": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "connection"
+                },
+                {
+                    "action": "reject",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "connection"
+                },
+                {
+                    "action": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "content"
+                },
+                {
+                    "action": "reject",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "silent-drop",
+                    "type": "connection"
+                },
+                {
+                    "action": "silent-drop",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "connection"
+                },
+                {
+                    "action": "lua",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "connection"
+                },
+                {
+                    "action": "sc-add-gpc",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_idx": "0",
+                    "sc_inc_id": "1",
+                    "sc_int": 1,
+                    "type": "connection"
+                },
+                {
+                    "action": "lua",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "content"
+                },
+                {
+                    "action": "sc-add-gpc",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_idx": "0",
+                    "sc_inc_id": "1",
+                    "sc_int": 1,
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "1m",
+                    "bandwidth_limit_name": "my-limit",
+                    "bandwidth_limit_period": "10s",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "2m",
+                    "bandwidth_limit_name": "my-limit-reverse",
+                    "bandwidth_limit_period": "20s",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "3m",
+                    "bandwidth_limit_name": "my-limit-cond",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content"
+                },
+                {
+                    "action": "set-mark",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "mark_value": "0x1Ab",
+                    "type": "connection"
+                },
+                {
+                    "action": "set-src-port",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "hdr(port)",
+                    "type": "connection"
+                },
+                {
+                    "action": "set-tos",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "tos_value": "1",
+                    "type": "connection"
+                },
+                {
+                    "action": "set-log-level",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "log_level": "silent",
+                    "type": "content"
+                },
+                {
+                    "action": "set-mark",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "mark_value": "0x1Ac",
+                    "type": "content"
+                },
+                {
+                    "action": "set-nice",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "nice_value": 2,
+                    "type": "content"
+                },
+                {
+                    "action": "set-src-port",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "expr": "hdr(port)",
+                    "type": "content"
+                },
+                {
+                    "action": "set-tos",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "tos_value": "3",
+                    "type": "content"
+                },
+                {
+                    "action": "set-var-fmt",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "content",
+                    "var_format": "ssl_c_s_tn",
+                    "var_name": "tn",
+                    "var_scope": "req"
+                },
+                {
+                    "action": "switch-mode",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "switch_mode_proto": "my-proto",
+                    "type": "content"
+                },
+                {
+                    "action": "sc-add-gpc",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "sc_idx": "0",
+                    "sc_inc_id": "1",
+                    "sc_int": 1,
+                    "type": "session"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 0,
+                    "track_table": "tr0",
+                    "type": "content"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 0,
+                    "track_table": "tr0",
+                    "type": "connection"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 0,
+                    "track_table": "tr0",
+                    "type": "session"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 5,
+                    "track_table": "test",
+                    "type": "content"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 5,
+                    "track_table": "test",
+                    "type": "connection"
+                },
+                {
+                    "action": "track-sc",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "track_key": "src",
+                    "track_stick_counter": 5,
+                    "track_table": "test",
+                    "type": "session"
+                },
+                {
+                    "action": "attach-srv",
+                    "server_name": "srv1",
+                    "type": "session"
+                },
+                {
+                    "action": "attach-srv",
+                    "expr": "example.com",
+                    "server_name": "srv2",
+                    "type": "session"
+                },
+                {
+                    "action": "attach-srv",
+                    "cond": "if",
+                    "cond_test": "is_cached",
+                    "server_name": "srv3",
+                    "type": "session"
+                },
+                {
+                    "action": "set-fc-mark",
+                    "type": "connection",
+                    "expr": "0xffffffff"
+                },
+                {
+                    "action": "set-fc-tos",
+                    "type": "connection",
+                    "expr": "0"
+                },
+                {
+                    "action": "set-fc-mark",
+                    "type": "session",
+                    "expr": "0"
+                },
+                {
+                    "action": "set-fc-tos",
+                    "type": "session",
+                    "expr": "0xff"
+                },
+                {
+                    "action": "set-bc-mark",
+                    "type": "content",
+                    "expr": "899",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "action": "set-bc-tos",
+                    "type": "content",
+                    "expr": "2",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "action": "set-fc-mark",
+                    "type": "content",
+                    "expr": "hdr(port)",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "action": "set-fc-tos",
+                    "type": "content",
+                    "expr": "req.hdr_cnt(\"X-Secret\")"
+                },
+                {
+                    "action": "set-var-fmt",
+                    "type": "connection",
+                    "var_format": "%%[dst]:%%[dst_port]",
+                    "var_scope": "txn",
+                    "var_name": "ip_port"
+                },
+                {
+                    "type": "connection",
+                    "action": "sc-set-gpt",
+                    "sc_inc_id": "1",
+                    "sc_idx": "2",
+                    "sc_int": 1234,
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "content",
+                    "action": "sc-set-gpt",
+                    "sc_inc_id": "1",
+                    "sc_idx": "2",
+                    "expr": "hdr(port)",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "session",
+                    "action": "sc-set-gpt",
+                    "sc_inc_id": "1",
+                    "sc_idx": "2",
+                    "sc_int": 1234
+                },
+                {
+                    "type": "content",
+                    "action": "set-retries",
+                    "expr": "3"
+                },
+                {
+                    "type": "content",
+                    "action": "set-retries",
+                    "expr": "var(txn.retries)",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "connection",
+                    "action": "do-log"
+                },
+                {
+                    "type": "connection",
+                    "action": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "session",
+                    "action": "do-log"
+                },
+                {
+                    "type": "session",
+                    "action": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                },
+                {
+                    "type": "content",
+                    "action": "do-log"
+                },
+                {
+                    "type": "content",
+                    "action": "do-log",
+                    "cond": "if",
+                    "cond_test": "FALSE"
+                }
+            ],
+            "quic_initial_rule_list": [
+                {
+                    "type": "reject"
+                },
+                {
+                    "type": "reject",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "accept"
+                },
+                {
+                    "type": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "send-retry"
+                },
+                {
+                    "type": "send-retry",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "dgram-drop"
+                },
+                {
+                    "type": "dgram-drop",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                }
+            ],
+            "binds": {
+                "ipv6": {
+                    "name": "ipv6",
+                    "thread": "1/1-1",
+                    "address": "2a01:c9c0:a3:8::3",
+                    "port": 80,
+                    "force_sslv3": true,
+                    "sslv3": "enabled",
+                    "idle_ping": 10000
+                },
+                "test-quic": {
+                    "name": "test-quic",
+                    "quic-socket": "connection",
+                    "thread": "1/1",
+                    "address": "192.168.1.1",
+                    "port": 80
+                },
+                "testnbcon": {
+                    "name": "testnbcon",
+                    "nbconn": 6,
+                    "thread": "1/all",
+                    "address": "192.168.1.1",
+                    "port": 80
+                },
+                "webserv": {
+                    "ca_verify_file": "ca.pem",
+                    "client_sigalgs": "ECDSA+SHA256:RSA+SHA256",
+                    "guid_prefix": "guid-example",
+                    "name": "webserv",
+                    "nice": 789,
+                    "sigalgs": "RSA+SHA256",
+                    "thread": "all",
+                    "address": "192.168.1.1",
+                    "port": 80,
+                    "default_crt_list": [
+                        "foobar.pem.rsa",
+                        "foobar.pem.ecdsa"
+                    ],
+                    "tcp_md5sig": "secretpass",
+                    "ktls": "on"
+                },
+                "webserv2": {
+                    "name": "webserv2",
+                    "thread": "1/all",
+                    "address": "192.168.1.1",
+                    "port": 8080,
+                    "force_tlsv10": true,
+                    "ssl": true,
+                    "tlsv10": "enabled",
+                    "no_strict_sni": true,
+                    "force_strict_sni": "disabled",
+                    "tls_tickets": "enabled",
+                    "cc": "reno"
+                },
+                "webserv3": {
+                    "name": "webserv3",
+                    "thread": "1/1",
+                    "address": "192.168.1.2",
+                    "port": 8080,
+                    "no_tlsv10": true,
+                    "tlsv10": "disabled",
+                    "strict_sni": true,
+                    "force_strict_sni": "enabled",
+                    "no_tls_tickets": true,
+                    "tls_tickets": "disabled",
+                    "cc": "bbr"
+                },
+                "test-quic-algo": {
+                    "name": "test-quic-algo",
+                    "thread": "1/1",
+                    "address": "192.168.1.1",
+                    "port": 80,
+                    "quic-cc-algo": "newreno"
+                },
+                "test-quic-algo2": {
+                    "name": "test-quic-algo2",
+                    "thread": "1/1",
+                    "address": "192.168.1.1",
+                    "port": 80,
+                    "quic-cc-algo": "bbr",
+                    "quic_cc_algo_max_window": 480
+                },
+                "test-quic-algo3": {
+                    "name": "test-quic-algo3",
+                    "thread": "1/1",
+                    "address": "192.168.1.1",
+                    "port": 80,
+                    "quic-cc-algo": "nocc",
+                    "quic_cc_algo_burst_size": 12,
+                    "label": "quic3"
+                },
+                "ssl-test": {
+                    "name": "ssl-test",
+                    "ssl": true,
+                    "address": "192.168.1.1",
+                    "port": 443,
+                    "crt_list": "list1.txt:list2.txt",
+                    "ssl_certificate": "dummy1.pem:dummy2.pem:dummy3.pem:dummy4.pem",
+                    "tcp_ss": 1
+                }
+            },
+            "ssl_front_use_list": [
+                {
+                    "certificate": "foobar.pem.rsa",
+                    "sigalgs": "\"RSA-PSS+SHA256\""
+                },
+                {
+                    "certificate": "test2.foobar.crt",
+                    "key": "test2.foobar.key",
+                    "ocsp": "test2.foobar.ocsp",
+                    "ocsp_update": "enabled"
+                }
+            ],
+            "force_be_switch_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "internal_acl"
+                },
+                {
+                    "cond": "unless",
+                    "cond_test": "public_acl"
+                }
+            ]
+        },
+        "test_2": {
+            "backlog": 2048,
+            "client_timeout": 4000,
+            "clitcpka": "enabled",
+            "clitcpka_cnt": 10,
+            "clitcpka_idle": 10000,
+            "clitcpka_intvl": 10000,
+            "contstats": "enabled",
+            "default_backend": "test_2",
+            "dontlog_normal": "disabled",
+            "dontlognull": "enabled",
+            "from": "test_defaults",
+            "http_connection_mode": "httpclose",
+            "http_ignore_probes": "disabled",
+            "http_keep_alive_timeout": 3000,
+            "http_no_delay": "disabled",
+            "http_request_timeout": 2000,
+            "http_use_proxy_header": "disabled",
+            "httplog": true,
+            "httpslog": "disabled",
+            "idle_close_on_response": "disabled",
+            "independent_streams": "disabled",
+            "log_separate_errors": "enabled",
+            "log_tag": "bla",
+            "maxconn": 2000,
+            "mode": "http",
+            "name": "test_2",
+            "nolinger": "disabled",
+            "originalto": {
+                "enabled": "enabled",
+                "except": "127.0.0.1",
+                "header": "X-Client-Dst"
+            },
+            "socket_stats": "disabled",
+            "splice_auto": "disabled",
+            "splice_request": "disabled",
+            "splice_response": "disabled",
+            "stats_options": {
+                "stats_auths": [
+                    {
+                        "passwd": "AdMiN123",
+                        "user": "admin"
+                    },
+                    {
+                        "passwd": "AdMiN1234",
+                        "user": "admin2"
+                    }
+                ],
+                "stats_realm": true,
+                "stats_realm_realm": "HAProxy\\\\ Statistics",
+                "stats_show_modules": true,
+                "stats_show_node_name": null
+            },
+            "tcp_smart_accept": "disabled",
+            "tcpka": "enabled",
+            "unique_id_format": "%{+X}o%ci:%cp_%fi:%fp_%Ts_%rt",
+            "unique_id_header": "X-Unique-ID-test-2",
+            "abortonclose": "disabled",
+            "http_request_rule_list": [
+                {
+                    "capture_len": 10,
+                    "capture_sample": "req.cook_cnt(FirstVisit),bool",
+                    "type": "capture"
+                },
+                {
+                    "capture_id": 0,
+                    "capture_sample": "req.cook_cnt(FirstVisit),bool",
+                    "type": "capture"
+                },
+                {
+                    "type": "add-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)"
+                },
+                {
+                    "type": "del-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_method": "beg"
+                },
+                {
+                    "type": "set-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_prefix": "x-"
+                }
+            ],
+            "http_response_rule_list": [
+                {
+                    "capture_id": 0,
+                    "capture_sample": "res.header",
+                    "type": "capture"
+                },
+                {
+                    "type": "add-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)",
+                    "hdr_prefix": "x-"
+                },
+                {
+                    "type": "del-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)"
+                },
+                {
+                    "type": "set-headers-bin",
+                    "hdr_expr": "var(txn.oldheaders)"
+                }
+            ],
+            "filter_list": [
+                {
+                    "rule-files": null,
+                    "type": "comp-req"
+                },
+                {
+                    "rule-files": null,
+                    "type": "comp-res"
+                }
+            ],
+            "waf_body_rule_list": [
+                {
+                    "cond": "unless",
+                    "cond_test": "{ var(txn.jwt_alg) \"RS256\" }",
+                    "index": 0,
+                    "type": "deny"
+                }
+            ]
+        }
+    },
+    "http_errors": {
+        "website-1": {
+            "error_files": [
+                {
+                    "code": 400,
+                    "file": "/etc/haproxy/errorfiles/site1/400.http"
+                },
+                {
+                    "code": 404,
+                    "file": "/etc/haproxy/errorfiles/site1/404.http"
+                },
+                {
+                    "code": 408,
+                    "file": "/dev/null"
+                }
+            ],
+            "name": "website-1"
+        },
+        "website-2": {
+            "error_files": [
+                {
+                    "code": 400,
+                    "file": "/etc/haproxy/errorfiles/site2/400.http"
+                },
+                {
+                    "code": 404,
+                    "file": "/etc/haproxy/errorfiles/site2/404.http"
+                },
+                {
+                    "code": 501,
+                    "file": "/etc/haproxy/errorfiles/site2/501.http"
+                }
+            ],
+            "name": "website-2"
+        }
+    },
+    "log_forwards": {
+        "sylog-loadb": {
+            "assume-rfc6587-ntf": true,
+            "dont-parse-log": true,
+            "backlog": 10,
+            "maxconn": 1000,
+            "name": "sylog-loadb",
+            "timeout_client": 10000,
+            "log_target_list": [
+                {
+                    "global": true
+                },
+                {
+                    "address": "ring@myring",
+                    "facility": "local0"
+                },
+                {
+                    "address": "127.0.0.1:10001",
+                    "facility": "local0",
+                    "sample_range": "1",
+                    "sample_size": 4
+                },
+                {
+                    "address": "127.0.0.1:10002",
+                    "facility": "local0",
+                    "sample_range": "2",
+                    "sample_size": 4
+                },
+                {
+                    "address": "127.0.0.1:10003",
+                    "facility": "local0",
+                    "sample_range": "3",
+                    "sample_size": 4
+                },
+                {
+                    "address": "127.0.0.1:10004",
+                    "facility": "local0",
+                    "sample_range": "4",
+                    "sample_size": 4
+                }
+            ],
+            "binds": {
+                "127.0.0.1:1514": {
+                    "name": "127.0.0.1:1514",
+                    "address": "127.0.0.1",
+                    "port": 1514
+                }
+            },
+            "dgram_binds": {
+                "webserv": {
+                    "address": "127.0.0.1",
+                    "name": "webserv",
+                    "port": 1514,
+                    "transparent": true
+                }
+            }
+        }
+    },
+    "log_profiles": {
+        "logp1": {
+            "name": "logp1",
+            "log_tag": "tag1",
+            "steps": [
+                {
+                    "step": "connect",
+                    "drop": "enabled"
+                },
+                {
+                    "step": "error",
+                    "drop": "disabled",
+                    "format": "%ci: error",
+                    "sd": "%a %b sd"
+                },
+                {
+                    "step": "any",
+                    "drop": "disabled",
+                    "sd": "custom sd"
+                }
+            ]
+        }
+    },
+    "mailers_sections": {
+        "localmailer1": {
+            "name": "localmailer1",
+            "timeout": 15000,
+            "mailer_entries": {
+                "smtp1": {
+                    "address": "10.0.10.1",
+                    "name": "smtp1",
+                    "port": 514
+                },
+                "smtp2": {
+                    "address": "10.0.10.2",
+                    "name": "smtp2",
+                    "port": 514
+                }
+            }
+        }
+    },
+    "acme_providers": {
+        "test": {
+            "name": "test",
+            "contact": "me@example.com",
+            "acme_provider": "gandy",
+            "acme_vars": {
+                "ApiKey": "ple744587",
+                "Zone": "example.com"
+            },
+            "bits": 4096,
+            "challenge": "http-01",
+            "challenge_ready": ["cli", "dns"],
+            "directory": "https://acme.example.com/directory",
+            "dns_delay": 30000,
+            "dns_timeout": 600000,
+            "keytype": "ECDSA",
+            "map": "acme@t",
+            "profile": "shortlived",
+            "reuse_key": "enabled",
+            "eab_key_id": "/etc/haproxy/eab.keyid",
+            "eab_mac_alg": "HS256",
+            "eab_mac_key": "/etc/haproxy/eab.mackey"
+        }
+    },
+    "crt_stores": {
+        "cert-bunker1": {
+            "name": "cert-bunker1",
+            "crt_base": "/secure/certs",
+            "key_base": "/secure/keys",
+            "crt_loads": {
+                "example.com.pem": {
+                    "certificate": "example.com.pem",
+                    "alias": "example"
+                },
+                "lol.pem": {
+                    "certificate": "lol.pem",
+                    "key": "lol.key"
+                }
+            }
+        }
+    },
+    "traces": {
+        "entries": [
+            {
+                "trace": "h1 sink buf1 level developer verbosity complete start now"
+            },
+            {
+                "trace": "h2 sink buf2 level developer verbosity complete start now"
+            }
+        ]
+    },
+    "defaults": {
+        "test_defaults": {
+            "acl_list": [
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src",
+                    "value": "0.0.0.0/7 224.0.0.0/3"
+                },
+                {
+                    "acl_name": "invalid_src",
+                    "criterion": "src_port",
+                    "value": "0:1023"
+                },
+                {
+                    "acl_name": "local_dst",
+                    "criterion": "hdr(host)",
+                    "value": "-i localhost"
+                }
+            ],
+            "http-drop-request-trailers": "disabled",
+            "http-drop-response-trailers": "disabled",
+            "http_request_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "src 192.168.0.0/16",
+                    "type": "allow"
+                }
+            ],
+            "tcp_request_rule_list": [
+                {
+                    "action": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "connection"
+                },
+                {
+                    "action": "reject",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "connection"
+                }
+            ],
+            "http_response_rule_list": [
+                {
+                    "cond": "if",
+                    "cond_test": "src 192.168.0.0/16",
+                    "type": "allow"
+                },
+                {
+                    "hdr_format": "%[ssl_fc]",
+                    "hdr_name": "X-SSL",
+                    "type": "set-header"
+                }
+            ],
+            "http_after_response_rule_list": [
+                {
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "map_valuefmt": "%[res.hdr(X-Value)]",
+                    "type": "set-map"
+                },
+                {
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "map_file": "map.lst",
+                    "map_keyfmt": "%[src]",
+                    "type": "del-map"
+                },
+                {
+                    "acl_file": "map.lst",
+                    "acl_keyfmt": "%[src]",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "type": "del-acl"
+                }
+            ],
+            "tcp_response_rule_list": [
+                {
+                    "action": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE",
+                    "type": "content",
+                    "metadata": {
+                        "comment": "my comment"
+                    }
+                },
+                {
+                    "action": "lua",
+                    "cond": "if",
+                    "cond_test": "FALSE",
+                    "lua_action": "foo",
+                    "lua_params": "param1 param2",
+                    "type": "content"
+                },
+                {
+                    "action": "set-bandwidth-limit",
+                    "bandwidth_limit_limit": "1m",
+                    "bandwidth_limit_name": "my-limit",
+                    "bandwidth_limit_period": "10s",
+                    "type": "content"
+                }
+            ],
+            "quic_initial_rule_list": [
+                {
+                    "type": "reject"
+                },
+                {
+                    "type": "reject",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "accept"
+                },
+                {
+                    "type": "accept",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "send-retry"
+                },
+                {
+                    "type": "send-retry",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                },
+                {
+                    "type": "dgram-drop"
+                },
+                {
+                    "type": "dgram-drop",
+                    "cond": "if",
+                    "cond_test": "TRUE"
+                }
+            ],
+            "backlog": 1024,
+            "balance": {
+                "algorithm": "roundrobin"
+            },
+            "hash_balance_factor": 150,
+            "hash_preserve_affinity": "maxconn",
+            "maxconn": 2000,
+            "mode": "http",
+            "use_small_buffers": {
+                "enabled": "enabled",
+                "queue": true,
+                "l7_retries": true
+            },
+            "stats_options": {
+                "stats_show_version": true
+            },
+            "metadata": {
+                "comment": "testing_defaults"
+            },
+            "name": "test_defaults",
+            "default_server": {
+                "fall": 2000,
+                "health_check_port": 8888,
+                "inter": 5000,
+                "rise": 4000,
+                "sni_auto": "enabled",
+                "check_sni_auto": "enabled",
+                "ktls": "off"
+            }
+        },
+        "test_defaults_2": {
+            "clitcpka": "enabled",
+            "from": "test_defaults",
+            "log_steps": [
+                "request",
+                "response"
+            ],
+            "name": "test_defaults_2",
+            "srvtcpka": "enabled"
+        },
+        "unnamed_defaults_1": {
+            "error_files": [
+                {
+                    "code": 403,
+                    "file": "/test/403.html"
+                },
+                {
+                    "code": 500,
+                    "file": "/test/500.html"
+                },
+                {
+                    "code": 429,
+                    "file": "/test/429.html"
+                }
+            ],
+            "accept_invalid_http_request": "enabled",
+            "accept_invalid_http_response": "enabled",
+            "accept_unsafe_violations_in_http_request": "enabled",
+            "accept_unsafe_violations_in_http_response": "enabled",
+            "backlog": 1024,
+            "balance": {
+                "algorithm": "roundrobin"
+            },
+            "check_timeout": 2000,
+            "checkcache": "disabled",
+            "client_fin_timeout": 1000,
+            "client_timeout": 4000,
+            "clitcpka": "enabled",
+            "clitcpka_cnt": 10,
+            "clitcpka_idle": 10000,
+            "clitcpka_intvl": 10000,
+            "compression": {
+                "offload": true
+            },
+            "connect_timeout": 5000,
+            "default_backend": "test",
+            "default_server": {
+                "fall": 2,
+                "health_check_port": 8888,
+                "inter": 5000,
+                "rise": 4
+            },
+            "disable_h2_upgrade": "enabled",
+            "dontlog_normal": "enabled",
+            "dontlognull": "enabled",
+            "email_alert": {
+                "from": "srv01@example.com",
+                "level": "err",
+                "mailers": "localmailer1",
+                "myhostname": "srv01",
+                "to": "support@example.com"
+            },
+            "external_check": "enabled",
+            "external_check_command": "/bin/true",
+            "external_check_path": "/bin",
+            "forwardfor": {
+                "enabled": "enabled",
+                "header": "X-Forwarded-For"
+            },
+            "fullconn": 10,
+            "h1_case_adjust_bogus_client": "enabled",
+            "h1_case_adjust_bogus_server": "enabled",
+            "http-check": {
+                "type": "send-state"
+            },
+            "http_connection_mode": "httpclose",
+            "http_ignore_probes": "disabled",
+            "http_keep_alive_timeout": 3000,
+            "http_no_delay": "enabled",
+            "http_request_timeout": 2000,
+            "http_restrict_req_hdr_names": "reject",
+            "http_send_name_header": "",
+            "http_use_proxy_header": "disabled",
+            "httplog": true,
+            "httpslog": "disabled",
+            "idle_close_on_response": "enabled",
+            "independent_streams": "disabled",
+            "load_server_state_from_file": "global",
+            "log_health_checks": "enabled",
+            "max_keep_alive_queue": 100,
+            "maxconn": 2000,
+            "mode": "http",
+            "monitor_uri": "/monitor",
+            "name": "unnamed_defaults_1",
+            "nolinger": "disabled",
+            "originalto": {
+                "enabled": "enabled"
+            },
+            "persist": "enabled",
+            "persist_rule": {
+                "type": "rdp-cookie"
+            },
+            "prefer_last_server": "enabled",
+            "queue_timeout": 900,
+            "retry_on": "503 504",
+            "server_fin_timeout": 1000,
+            "server_timeout": 2000,
+            "socket_stats": "enabled",
+            "source": {
+                "address": "192.168.1.200",
+                "address_second": "192.168.1.201",
+                "port": 80,
+                "port_second": 443,
+                "usesrc": "address"
+            },
+            "splice_auto": "enabled",
+            "splice_request": "enabled",
+            "splice_response": "enabled",
+            "srvtcpka": "enabled",
+            "srvtcpka_cnt": 10,
+            "srvtcpka_idle": 10000,
+            "srvtcpka_intvl": 10000,
+            "stats_options": {
+                "stats_auths": [
+                    {
+                        "passwd": "AdMiN123",
+                        "user": "admin"
+                    },
+                    {
+                        "passwd": "AdMiN1234",
+                        "user": "admin2"
+                    }
+                ],
+                "stats_realm": true,
+                "stats_realm_realm": "HAProxy\\\\ Statistics",
+                "stats_show_modules": true,
+                "stats_show_node_name": null
+            },
+            "tarpit_timeout": 2000,
+            "tcp_smart_accept": "enabled",
+            "tcp_smart_connect": "enabled",
+            "tcpka": "enabled",
+            "transparent": "enabled",
+            "http_check_list": [
+                {
+                    "type": "send-state"
+                },
+                {
+                    "type": "disable-on-404"
+                }
+            ],
+            "http_error_rule_list": [
+                {
+                    "return_content": "/test/503",
+                    "return_content_format": "file",
+                    "return_content_type": "\"application/json\"",
+                    "status": 503,
+                    "type": "status"
+                },
+                {
+                    "return_content": "/test/429",
+                    "return_content_format": "file",
+                    "return_content_type": "application/json",
+                    "status": 429,
+                    "type": "status"
+                }
+            ],
+            "tcp_check_rule_list": [
+                {
+                    "action": "send",
+                    "data": "GET\\ /\\ HTTP/2.0\\r\\n"
+                }
+            ]
+        }
+    },
+    "peers": {
+        "mycluster": {
+            "default_bind": {
+                "alpn": "h2,http/1.1",
+                "ssl": true,
+                "ssl_certificate": "/etc/haproxy/site.pem",
+                "v4v6": true,
+                "ktls": "off"
+            },
+            "default_server": {
+                "fall": 2,
+                "health_check_port": 8888,
+                "inter": 5000,
+                "rise": 4,
+                "slowstart": 6000
+            },
+            "enabled": true,
+            "name": "mycluster",
+            "shards": 3,
+            "peer_entries": {
+                "aggregator": {
+                    "address": "HARDCODEDCLUSTERIP",
+                    "name": "aggregator",
+                    "port": 10023
+                },
+                "hapee": {
+                    "address": "192.168.1.1",
+                    "name": "hapee",
+                    "port": 1023,
+                    "shard": 1
+                }
+            },
+            "tables": {
+                "t1": {
+                    "expire": "5m",
+                    "name": "t1",
+                    "no_purge": true,
+                    "size": "200k",
+                    "store": "gpc0,conn_rate(30s)",
+                    "type": "string",
+                    "type_len": 1000,
+                    "recv_only": true
+                },
+                "t2": {
+                    "expire": "5m",
+                    "name": "t2",
+                    "no_purge": true,
+                    "size": "200k",
+                    "store": "gpc0,gpc1,conn_rate(30s)",
+                    "type": "string",
+                    "type_len": 1000
+                },
+                "t9": {
+                    "expire": "5m",
+                    "name": "t9",
+                    "no_purge": true,
+                    "size": "200k",
+                    "store": "gpc0,conn_rate(30s)",
+                    "type": "string",
+                    "type_len": 1000,
+                    "write_to": "t2"
+                }
+            }
+        }
+    },
+    "resolvers": {
+        "test": {
+            "accepted_payload_size": 8192,
+            "hold_nx": 30000,
+            "hold_other": 30000,
+            "hold_refused": 30000,
+            "hold_timeout": 30000,
+            "hold_valid": 5000,
+            "name": "test",
+            "resolve_retries": 3,
+            "timeout_resolve": 1000,
+            "timeout_retry": 1000,
+            "nameservers": {
+                "dns1": {
+                    "address": "10.0.0.1",
+                    "name": "dns1",
+                    "port": 53
+                }
+            }
+        }
+    },
+    "rings": {
+        "myring": {
+            "description": "\"My local buffer\"",
+            "format": "rfc3164",
+            "maxlen": 1200,
+            "name": "myring",
+            "size": 32764,
+            "timeout_connect": 5000,
+            "timeout_server": 10000,
+            "servers": {
+                "mysyslogsrv": {
+                    "log_proto": "octet-count",
+                    "address": "127.0.0.1",
+                    "name": "mysyslogsrv",
+                    "port": 6514
+                },
+                "s1": {
+                    "check": "enabled",
+                    "resolve-net": "10.0.0.0/8,10.200.200.0/12",
+                    "resolve_opts": "allow-dup-ip,ignore-weight",
+                    "address": "192.168.1.1",
+                    "name": "s1",
+                    "port": 80
+                }
+            }
+        }
+    },
+    "userlists": {
+        "first": {
+            "name": "first",
+            "metadata": {
+                "comment": "my comment"
+            },
+            "groups": {
+                "G1": {
+                    "name": "G1",
+                    "users": "tiger,scott"
+                },
+                "G2": {
+                    "name": "G2",
+                    "users": "scott"
+                }
+            },
+            "users": {
+                "scott": {
+                    "password": "elgato",
+                    "secure_password": false,
+                    "username": "scott"
+                },
+                "tiger": {
+                    "password": "$6$k6y3o.eP$JlKBx9za9667qe4xHSwRv6J.C0/D7cV91",
+                    "secure_password": true,
+                    "username": "tiger"
+                }
+            }
+        },
+        "second": {
+            "name": "second",
+            "groups": {
+                "one": {
+                    "name": "one"
+                },
+                "three": {
+                    "name": "three"
+                },
+                "two": {
+                    "name": "two"
+                }
+            },
+            "users": {
+                "anderson": {
+                    "groups": "two",
+                    "password": "hello",
+                    "secure_password": false,
+                    "username": "anderson"
+                },
+                "neo": {
+                    "groups": "one",
+                    "password": "$6$k6y3o.eP$JlKBxxHSwRv6J.C0/D7cV91",
+                    "secure_password": true,
+                    "username": "neo"
+                },
+                "thomas": {
+                    "groups": "one,two",
+                    "password": "white-rabbit",
+                    "secure_password": false,
+                    "username": "thomas"
+                }
+            }
+        }
+    },
+    "healthchecks": {
+        "name": "test",
+        "type": "tcp-check",
+        "tcp_check_rule_list": [
+            {
+                "action": "send",
+                "data": "GET\\ /\\ HTTP/2.0\\r\\n"
+            }
+        ]
+    }
+}

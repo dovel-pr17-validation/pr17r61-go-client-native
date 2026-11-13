@@ -1,0 +1,85 @@
+---
+stick_rule:
+  title: Stick Rule
+  description: Define a pattern used to create an entry in a stickiness table or matching condition or associate a user to a server.
+  type: object
+  required:
+    - type
+    - pattern
+  properties:
+    type:
+      type: string
+      enum: [match, "on", store-request, store-response]
+      x-nullable: false
+    pattern:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: false
+    table:
+      type: string
+      pattern: '^[^\s]+$'
+    cond:
+      type: string
+      x-display-name: Condition
+      enum: [if, unless]
+    cond_test:
+      type: string
+      x-display-name: Condition Test
+      x-dynamic-enum:
+        operation: getACLs
+        property: acl_name
+        freeFormat: true
+      x-dependency:
+        cond:
+          required: true
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+  example:
+    type: match
+    pattern: src
+stick_table:
+  type: object
+  properties:
+    type:
+      type: string
+      enum: [ip, ipv6, integer, string, binary]
+    keylen:
+      type: integer
+      x-display-name: Key Length
+      x-nullable: true
+    size:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-size: true
+    expire:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    nopurge:
+      type: boolean
+      x-display-name: No Purge
+    peers:
+      type: string
+      pattern: '^[^\s]+$'
+    srvkey:
+      type: string
+      enum: [addr, name]
+      x-nullable: true
+    recv_only:
+      type: boolean
+      x-display-name: Receive Only
+    store:
+      type: string
+      pattern: '^[^\s]+$'
+    write_to:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: true
+    metadata:
+      additionalProperties:
+        type: object

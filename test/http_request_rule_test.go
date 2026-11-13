@@ -1,0 +1,261 @@
+// Copyright 2019 HAProxy Technologies
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+package test
+
+import (
+	_ "embed"
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/haproxytech/client-native/v6/configuration"
+	"github.com/haproxytech/client-native/v6/configuration/options"
+	"github.com/haproxytech/client-native/v6/misc"
+	"github.com/haproxytech/client-native/v6/models"
+	"github.com/stretchr/testify/require"
+)
+
+func hTTPRequestRuleExpectation() map[string]models.HTTPRequestRules {
+	initStructuredExpected()
+	res := StructuredToHTTPRequestRuleMap()
+	// Add individual entries
+	for k, vs := range res {
+		for i, v := range vs {
+			key := fmt.Sprintf("%s/%d", k, i)
+			res[key] = models.HTTPRequestRules{v}
+		}
+	}
+	return res
+}
+
+func TestGetHTTPRequestRules(t *testing.T) { //nolint:gocognit,gocyclo
+	mrules := make(map[string]models.HTTPRequestRules)
+	v, hRules, err := clientTest.GetHTTPRequestRules(configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	mrules["frontend/test"] = hRules
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+
+	_, hRules, err = clientTest.GetHTTPRequestRules(configuration.BackendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	mrules["backend/test"] = hRules
+
+	_, hRules, err = clientTest.GetHTTPRequestRules(configuration.BackendParentName, "test_2", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	mrules["backend/test_2"] = hRules
+
+	checkHTTPRequestRules(t, mrules)
+}
+
+func checkHTTPRequestRules(t *testing.T, got map[string]models.HTTPRequestRules) {
+	exp := hTTPRequestRuleExpectation()
+	for k, v := range got {
+		want, ok := exp[k]
+		require.True(t, ok, "k=%s", k)
+		require.Equal(t, len(want), len(v), "k=%s", k)
+		i := 0
+		for _, w := range want {
+			require.True(t, v[i].Equal(*w), "k=%s - diff %v", k, cmp.Diff(*v[i], *w))
+			i++
+		}
+	}
+}
+
+func TestGetHTTPRequestRule(t *testing.T) {
+	m := make(map[string]models.HTTPRequestRules)
+	v, r, err := clientTest.GetHTTPRequestRule(0, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+	m["frontend/test/0"] = models.HTTPRequestRules{r}
+
+	_, err = r.MarshalBinary()
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	_, _, err = clientTest.GetHTTPRequestRule(3, configuration.BackendParentName, "test_2", "")
+	if err == nil {
+		t.Error("Should throw error, non existent HTTP Request Rule")
+	}
+
+	_, r, err = clientTest.GetHTTPRequestRule(0, configuration.FrontendParentName, "test_2", "")
+	if err != nil {
+		t.Error("Should throw error, non existent HTTP Request Rule")
+	}
+	m["frontend/test_2/0"] = models.HTTPRequestRules{r}
+
+	_, r, err = clientTest.GetHTTPRequestRule(1, configuration.FrontendParentName, "test_2", "")
+	if err != nil {
+		t.Error("Should throw error, non existent HTTP Request Rule")
+	}
+	m["frontend/test_2/1"] = models.HTTPRequestRules{r}
+
+	_, r, err = clientTest.GetHTTPRequestRule(0, configuration.DefaultsParentName, "test_defaults", "")
+	m["defaults/test_defaults/0"] = models.HTTPRequestRules{r}
+
+	checkHTTPRequestRules(t, m)
+}
+
+func TestCreateEditDeleteHTTPRequestRule(t *testing.T) {
+	id := int64(1)
+
+	// TestCreateHTTPRequestRule
+	var redirCode int64 = 301
+	r := &models.HTTPRequestRule{
+		Type:       "redirect",
+		RedirCode:  &redirCode,
+		RedirValue: "http://www.%[hdr(host)]%[capture.req.uri]",
+		RedirType:  "location",
+	}
+
+	err := clientTest.CreateHTTPRequestRule(id, configuration.FrontendParentName, "test", r, "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	v, ondiskR, err := clientTest.GetHTTPRequestRule(1, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if !reflect.DeepEqual(ondiskR, r) {
+		fmt.Printf("Created HTTP request rule: %v\n", ondiskR)
+		fmt.Printf("Given HTTP request rule: %v\n", r)
+		t.Error("Created HTTP request rule not equal to given HTTP request rule")
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+
+	// TestEditHTTPRequestRule
+	r = &models.HTTPRequestRule{
+		Type:       "redirect",
+		RedirCode:  &redirCode,
+		RedirValue: "http://www1.%[hdr(host)]%[capture.req.uri]",
+		RedirType:  "scheme",
+	}
+
+	err = clientTest.EditHTTPRequestRule(1, configuration.FrontendParentName, "test", r, "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	v, ondiskR, err = clientTest.GetHTTPRequestRule(1, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if !reflect.DeepEqual(ondiskR, r) {
+		fmt.Printf("Edited HTTP request rule: %v\n", ondiskR)
+		fmt.Printf("Given HTTP request rule: %v\n", r)
+		t.Error("Edited HTTP request rule not equal to given HTTP request rule")
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+
+	// TestDeleteHTTPRequest
+	_, rules, err := clientTest.GetHTTPRequestRules(configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	N := int64(len(rules)) - 1
+	err = clientTest.DeleteHTTPRequestRule(N, configuration.FrontendParentName, "test", "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	if v, _ := clientTest.GetVersion(""); v != version {
+		t.Error("Version not incremented")
+	}
+
+	_, _, err = clientTest.GetHTTPRequestRule(N, "frontend", "test", "")
+	if err == nil {
+		t.Errorf("DeleteHTTPRequestRule failed, HTTP Request Rule %d still exists", N)
+	}
+
+	err = clientTest.DeleteHTTPRequestRule(2, configuration.BackendParentName, "test_2", "", version)
+	if err == nil {
+		t.Error("Should throw error, non existent HTTP Request Rule")
+		version++
+	}
+}
+
+func TestSerializeHTTPRequestRule(t *testing.T) {
+	testCases := []struct {
+		input          models.HTTPRequestRule
+		expectedResult string
+	}{
+		{
+			input: models.HTTPRequestRule{
+				Type:                models.HTTPRequestRuleTypeTrackDashSc,
+				Cond:                "if",
+				CondTest:            "TRUE",
+				TrackScKey:          "src",
+				TrackScTable:        "tr0",
+				TrackScStickCounter: misc.Int64P(3),
+			},
+			expectedResult: "track-sc3 src table tr0 if TRUE",
+		},
+		{
+			input: models.HTTPRequestRule{
+				Type:     "set-uri",
+				Cond:     "if",
+				CondTest: "{ path_beg /metrics }",
+				URIFmt:   "%[url,regsub(^/metrics/,/,)]",
+			},
+			expectedResult: "set-uri %[url,regsub(^/metrics/,/,)] if { path_beg /metrics }",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.expectedResult, func(t *testing.T) {
+			opt := new(options.ConfigurationOptions)
+			opt.PreferredTimeSuffix = "d"
+			tcpType, err := configuration.SerializeHTTPRequestRule(testCase.input, opt)
+			if err != nil {
+				t.Error(err.Error())
+			}
+
+			actual := tcpType.String()
+			if actual != testCase.expectedResult {
+				t.Errorf("Expected %q, got: %q", testCase.expectedResult, actual)
+			}
+		})
+	}
+}

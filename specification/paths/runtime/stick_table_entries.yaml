@@ -1,0 +1,62 @@
+---
+stick_table_entries:
+  post:
+    summary: Set Entry to Stick Table
+    description: Create or update a stick-table entry in the table.
+    operationId: setStickTableEntries
+    tags:
+      - StickTable
+    parameters:
+      - $ref: "#/parameters/parent_name"
+      - name: stick_table_entry
+        in: body
+        description: Stick table entry
+        schema:
+          type: object
+          required:
+            - key
+            - data_type
+          properties:
+            key:
+              type: string
+              pattern: '^[^\r\n;#]+$'
+            data_type:
+              $ref: "#/definitions/stick_table_entry"
+    responses:
+      '204':
+        description: Successful operation
+      'default':
+        $ref: '#/responses/DefaultError'
+  get:
+    summary: Return Stick Table Entries
+    description: Returns an array of all entries in a given stick tables.
+    operationId: getStickTableEntries
+    tags:
+      - StickTable
+    parameters:
+      - $ref: "#/parameters/parent_name"
+      - name: filter
+        in: query
+        description: A list of filters in format data.<type> <operator> <value> separated by comma
+        type: string
+        pattern: '^[^\r\n;#]+$'
+      - name: key
+        in: query
+        description: Key which we want the entries for
+        type: string
+        pattern: '^[^\r\n;#]+$'
+      - name: count
+        in: query
+        description: Max number of entries to be returned for pagination
+        type: integer
+      - name: offset
+        in: query
+        description: Offset which indicates how many items we skip in pagination
+        type: integer
+    responses:
+      '200':
+        description: Successful operation
+        schema:
+          $ref: "#/definitions/stick_table_entries"
+      'default':
+        $ref: '#/responses/DefaultError'

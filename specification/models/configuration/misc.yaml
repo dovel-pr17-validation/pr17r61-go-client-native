@@ -1,0 +1,482 @@
+---
+forwardfor:
+  type: object
+  x-display-name: ForwardFor
+  required:
+    - enabled
+  properties:
+    enabled:
+      type: string
+      enum: [enabled]
+    except:
+      type: string
+      pattern: '^[^\s]+$'
+    header:
+      type: string
+      pattern: '^[^\s]+$'
+    ifnone:
+      type: boolean
+forwarded:
+  type: object
+  x-display-name: Forwarded
+  description: Controls insertion of the HTTP Forwarded header field.
+  required:
+    - enabled
+  properties:
+    enabled:
+      type: string
+      description: Enables or disables insertion of the HTTP Forwarded header field.
+      enum: [enabled, disabled]
+    proto:
+      type: boolean
+      description: Adds the proto parameter using the incoming request protocol.
+    host:
+      type: boolean
+      description: Adds the host parameter using the request authority.
+    host_expr:
+      type: string
+      description: Adds the host parameter using the specified log-format expression.
+    by:
+      type: boolean
+      description: Adds the by parameter using the local address.
+    by_expr:
+      type: string
+      description: Adds the by parameter using the specified log-format expression.
+    by_port:
+      type: boolean
+      description: Adds the by parameter port using the local port.
+    by_port_expr:
+      type: string
+      description: Adds the by parameter port using the specified log-format expression.
+    for:
+      type: boolean
+      x-go-name: For
+      description: Adds the for parameter using the client address.
+    for_expr:
+      type: string
+      description: Adds the for parameter using the specified log-format expression.
+    for_port:
+      type: boolean
+      description: Adds the for parameter port using the client port.
+    for_port_expr:
+      type: string
+      description: Adds the for parameter port using the specified log-format expression.
+persist_rule:
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      type: string
+      enum: [rdp-cookie]
+    rdp_cookie_name:
+      type: string
+      x-display-name: Rdp Cookie Name
+      pattern: '^[^\s]+$'
+      x-dependency:
+        type:
+          value: rdp-cookie
+balance:
+  type: object
+  required:
+    - algorithm
+  properties:
+    algorithm:
+      type: string
+      enum:
+        - first
+        - hash
+        - hdr
+        - leastconn
+        - random
+        - rdp-cookie
+        - roundrobin
+        - source
+        - static-rr
+        - uri
+        - url_param
+    uri_whole:
+      type: boolean
+      x-display-name: Uri Whole
+      x-dependency:
+        algorithm:
+          value: uri
+    uri_len:
+      type: integer
+      x-display-name: Uri Len
+      x-dependency:
+        algorithm:
+          value: uri
+    uri_depth:
+      type: integer
+      x-display-name: Uri Depth
+      x-dependency:
+        algorithm:
+          value: uri
+    url_param:
+      type: string
+      x-display-name: Url Param
+      pattern: '^[^\s]+$'
+      x-dependency:
+        algorithm:
+          value: url_param
+          required: true
+    url_param_check_post:
+      type: integer
+      x-display-name: Url Param Check Post
+      x-dependency:
+        algorithm:
+          value: url_param
+    url_param_max_wait:
+      type: integer
+      x-display-name: Url Param Max Weight
+      x-dependency:
+        algorithm:
+          value: url_param
+    hdr_name:
+      type: string
+      x-display-name: Header Name
+      x-dependency:
+        algorithm:
+          value: hdr
+          required: true
+    hdr_use_domain_only:
+      type: boolean
+      x-display-name: Header Use Domain Only
+      x-dependency:
+        algorithm:
+          value: hdr
+    random_draws:
+      type: integer
+      x-display-name: Random Draws
+      x-nullable: false
+      x-dependency:
+        algorithm:
+          value: random
+    rdp_cookie_name:
+      type: string
+      x-display-name: Rdp Cookie Name
+      pattern: '^[^\s]+$'
+      x-dependency:
+        algorithm:
+          value: rdp-cookie
+    uri_path_only:
+      type: boolean
+      x-display-name: Uri Path Only
+      x-dependency:
+        algorithm:
+          value: uri
+    hash_expression:
+      type: string
+      x-display-name: Hash Expression
+      x-dependency:
+        algorithm:
+          value: hash
+httpchk_params:
+  type: object
+  x-display-name: HTTP Check
+  properties:
+    method:
+      type: string
+      enum: [HEAD, PUT, POST, GET, TRACE, PATCH, DELETE, CONNECT, OPTIONS]
+    uri:
+      type: string
+      pattern: '^[^ ]*$'
+    version:
+      type: string
+    host:
+      type: string
+redispatch:
+  type: object
+  required:
+    - enabled
+  properties:
+    enabled:
+      type: string
+      enum: [enabled, disabled]
+    interval:
+      type: integer
+      x-nullable: true
+errorfile:
+  type: object
+  x-display-name: Error File
+  properties:
+    code:
+      type: integer
+      enum: [200, 400, 401, 403, 404, 405, 407, 408, 410, 413, 425, 429, 500, 501, 502, 503, 504]
+    file:
+      type: string
+cookie:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[^\s]+$'
+    type:
+      type: string
+      enum: [rewrite, insert, prefix]
+    indirect:
+      type: boolean
+    nocache:
+      type: boolean
+    postonly:
+      type: boolean
+    preserve:
+      type: boolean
+    httponly:
+      type: boolean
+    secure:
+      type: boolean
+    domain:
+      type: array
+      x-omitempty: true
+      x-go-name: Domains
+      items:
+        type: object
+        x-go-name: Domain
+        properties:
+          value:
+            type: string
+            pattern: '^[^\s]+$'
+    attr:
+      type: array
+      x-omitempty: true
+      x-go-name: Attrs
+      items:
+        type: object
+        x-go-name: Attr
+        properties:
+          value:
+            type: string
+            pattern: '^[^\s]+$'
+    maxidle:
+      type: integer
+    maxlife:
+      type: integer
+    dynamic:
+      type: boolean
+stats_options:
+  type: object
+  properties:
+    stats_admin:
+      type: boolean
+      x-display-name: Stats Admin
+    stats_admin_cond:
+      type: string
+      x-display-name: Stats Admin Condition
+      enum: [if, unless]
+      x-dependency:
+        stats_admin:
+          value: true
+          required: true
+    stats_admin_cond_test:
+      type: string
+      x-display-name: Stats Admin Condition Test
+      x-dynamic-enum:
+        operation: getACLs
+        property: acl_name
+        freeFormat: true
+      x-dependency:
+        stats_admin_cond:
+          required: true
+    stats_enable:
+      type: boolean
+      x-display-name: Stats Enable
+    stats_hide_version:
+      type: boolean
+      x-display-name: Stats Hide Version
+    stats_maxconn:
+      type: integer
+      minimum: 1
+    stats_refresh_delay:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: s
+    stats_show_desc:
+      type: string
+      x-nullable: true
+    stats_show_legends:
+      type: boolean
+      x-display-name: Stats Show Legends
+    stats_show_node_name:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: true
+      x-omitempty: false
+    stats_uri_prefix:
+      type: string
+      pattern: '^[^\s]+$'
+    stats_show_modules:
+      type: boolean
+      x-display-name: Stats Show Modules
+    stats_show_version:
+      type: boolean
+      x-display-name: Stats Show Version
+    stats_realm:
+      type: boolean
+      x-display-name: Stats Realm
+    stats_realm_realm:
+      type: string
+      x-nullable: true
+      x-dependency:
+        stats_realm:
+          value: true
+          required: true
+    stats_http_requests:
+      type: array
+      x-omitempty: true
+      items:
+        $ref: "#/definitions/stats_http_request"
+      x-display-name: Stats HTTP Requests
+    stats_auths:
+      type: array
+      x-omitempty: true
+      items:
+        $ref: "#/definitions/stats_auth"
+      x-display-name: Stats Auths
+smtpchk_params:
+  type: object
+  properties:
+    hello:
+      type: string
+    domain:
+      type: string
+mysql_check_params:
+  type: object
+  properties:
+    username:
+      type: string
+    client_version:
+      type: string
+      enum: [pre-41, post-41]
+pgsql_check_params:
+  type: object
+  properties:
+    username:
+      type: string
+compression:
+  type: object
+  properties:
+    algorithms:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+        enum: [identity, gzip, deflate, raw-deflate]
+    types:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+    offload:
+      type: boolean
+    direction:
+      type: string
+      enum: [request, response, both]
+      x-omitempty: true
+    types-req:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+    types-res:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+    algo-req:
+      type: string
+      x-omitempty: true
+      enum: [identity, gzip, deflate, raw-deflate]
+    algos-res:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+        enum: [identity, gzip, deflate, raw-deflate]
+    minsize_req:
+      type: integer
+      x-size: true
+      x-display-name: Minimum Size for Requests
+    minsize_res:
+      type: integer
+      x-size: true
+      x-display-name: Minimum Size for Responses
+stats_http_request:
+  type: object
+  required:
+    - type
+  properties:
+    cond:
+      type: string
+    cond_test:
+      type: string
+      x-dependency:
+        cond:
+          required: true
+    type:
+      type: string
+      enum: [allow, deny, auth]
+    realm:
+      type: string
+      x-dependency:
+        type:
+          value: auth
+stats_auth:
+  type: object
+  required:
+    - user
+    - passwd
+  properties:
+    user:
+      type: string
+    passwd:
+      type: string
+originalto:
+  type: object
+  x-display-name: OriginalTo
+  required:
+    - enabled
+  properties:
+    enabled:
+      type: string
+      enum: [enabled]
+    except:
+      type: string
+      pattern: '^[^\s]+$'
+    header:
+      type: string
+      pattern: '^[^\s]+$'
+use_small_buffers:
+  type: object
+  x-display-name: Use Small Buffers
+  description: Enables support for small buffers for the given categories.
+  required:
+    - enabled
+  properties:
+    enabled:
+      type: string
+      enum: [enabled, disabled]
+    queue:
+      type: boolean
+      x-display-name: Queue
+    l7_retries:
+      type: boolean
+      x-display-name: L7 Retries
+    check:
+      type: boolean
+      x-display-name: Check
+http_codes:
+  type: object
+  x-go-name: HTTPCodes
+  required:
+    - value
+  properties:
+    value:
+      type: string
+      x-display-name: Value
+      pattern: '^[a-zA-Z0-9 +\-,]+$'

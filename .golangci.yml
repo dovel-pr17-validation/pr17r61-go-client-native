@@ -1,0 +1,77 @@
+version: "2"
+linters:
+  settings:
+    cyclop:
+      max-complexity: 42
+    gocyclo:
+      min-complexity: 42
+  default: all
+  disable:
+    - depguard
+    - dupword
+    - dupl
+    - err113
+    - exhaustruct
+    - forcetypeassert
+    - funcorder
+    - funlen
+    - goconst
+    - godoclint
+    - godot
+    - gomodguard
+    - interfacebloat
+    - ireturn
+    - lll
+    - mnd
+    - nestif
+    - nlreturn
+    - noinlineerr
+    - recvcheck
+    - revive
+    - varnamelen
+    - wrapcheck
+    - wsl
+    - wsl_v5
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      # //go:fix is a valid Go 1.25+ directive not yet known to the linter
+      - linters:
+          - gocheckcompilerdirectives
+        text: 'compiler directive unrecognized: //go:fix'
+      # taint-analysis findings (path traversal, SSRF, log injection) in
+      # internal developer/CI tooling, where inputs are trusted
+      - linters:
+          - gosec
+        path: ^(cmd|config-parser/generate)/
+        text: 'G70[346]'
+      - path: (.+)\.go$
+        text: 'unused-parameter: parameter ''comment'' seems to be unused'
+      - path: (.+)\.go$
+        text: 'unused-parameter: parameter ''parts'' seems to be unused'
+      - path: (.+)\.go$
+        text: 'unused-parameter: parameter ''parserType'' seems to be unused'
+    paths:
+      - .*_test\.go$
+      - test
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - .*_test\.go$
+      - test
+      - third_party$
+      - builtin$
+      - examples$

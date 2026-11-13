@@ -1,0 +1,80 @@
+---
+peer_section:
+  type: object
+  description: Peer Section with all its children resources
+  x-go-name: PeerSection
+  allOf:
+    - $ref: "#/definitions/peer_section_base"
+    - type: object
+      properties:
+        peer_entries:
+          additionalProperties:
+            $ref: "#/definitions/peer_entry"
+        binds:
+          additionalProperties:
+            $ref: "#/definitions/bind"
+        log_target_list:
+          $ref: "#/definitions/log_targets"
+          x-go-name: LogTargetList
+        servers:
+          additionalProperties:
+            $ref: "#/definitions/server"
+        tables:
+          additionalProperties:
+            $ref: "#/definitions/table"
+peer_section_base:
+  title: Peer Section Base
+  description: HAProxy peer_section configuration
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+      x-nullable: false
+    enabled:
+      type: boolean
+    disabled:
+      type: boolean
+    default_server:
+      $ref: "#/definitions/default_server"
+    default_bind:
+      $ref: "#/definitions/default_bind"
+    shards:
+      type: integer
+      description: |-
+        In some configurations, one would like to distribute the stick-table contents
+        to some peers in place of sending all the stick-table contents to each peer
+        declared in the "peers" section. In such cases, "shards" specifies the
+        number of peer involved in this stick-table contents distribution.
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+peer_entry:
+  title: Peer Entry
+  description: Peer Entry from peers table
+  type: object
+  required:
+    - name
+    - address
+    - port
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:${}"]+$'
+      x-nullable: false
+    address:
+      type: string
+      pattern: '^[^\s]+$'
+    port:
+      type: integer
+      x-nullable: true
+      minimum: 1
+      maximum: 65535
+    shard:
+      type: integer
+    metadata:
+      additionalProperties:
+        type: object

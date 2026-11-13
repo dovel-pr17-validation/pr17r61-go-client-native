@@ -1,0 +1,48 @@
+---
+bind:
+  title: Bind
+  description: HAProxy frontend bind configuration
+  allOf:
+    - $ref: '#/definitions/bind_params'
+    - type: object
+      required:
+        - name
+      properties:
+        address:
+          type: string
+          pattern: '^[^\s]+$'
+          example: 127.0.0.1
+        port:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          x-nullable: true
+          example: 80
+        port-range-end:
+          maximum: 65535
+          minimum: 1
+          type: integer
+          x-nullable: true
+          example: 81
+        name:
+          type: string
+          pattern: '^[^\s]+$'
+          x-nullable: false
+        metadata:
+          additionalProperties:
+            type: object
+      additionalProperties: false
+default_bind:
+  title: Default Bind
+  description: HAProxy default bind configuration
+  allOf:
+    - $ref: '#/definitions/bind_params'
+    - type: object
+      properties:
+        name:
+          type: string
+          pattern: '^[^\s]+$'
+          x-nullable: false
+        metadata:
+          additionalProperties:
+            type: object

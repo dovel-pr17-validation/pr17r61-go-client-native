@@ -1,0 +1,59 @@
+---
+ring:
+  type: object
+  description: Ring with all its children resources
+  x-go-name: Ring
+  allOf:
+    - $ref: "#/definitions/ring_base"
+    - type: object
+      properties:
+        servers:
+          additionalProperties:
+            $ref: "#/definitions/server"
+ring_base:
+  title: Ring Base
+  description: HAProxy ring configuration
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+      x-nullable: false
+    description:
+      type: string
+      description: The description is an optional description string of the ring
+    backing_file:
+      type: string
+      description: Optional file used to persist the ring buffer
+    format:
+      type: string
+      description: Format used to store events into the ring buffer
+      enum: [iso, local, raw, rfc3164, rfc5424, short, priority, timed]
+    maxlen:
+      type: integer
+      x-nullable: true
+      description: The maximum length of an event message stored into the ring
+    size:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      description: Optional size in bytes for the ring-buffer
+      x-size: true
+    timeout_connect:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    timeout_server:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false

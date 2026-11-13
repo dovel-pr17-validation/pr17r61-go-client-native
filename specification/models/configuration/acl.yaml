@@ -1,0 +1,27 @@
+---
+acl:
+  title: ACL Lines
+  description: |
+    The use of Access Control Lists (ACL) provides a flexible solution to perform
+    content switching and generally to take decisions based on content extracted
+    from the request, the response or any environmental status.
+  type: object
+  required:
+    - acl_name
+    - criterion
+  properties:
+    acl_name:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: false
+    criterion:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: false
+    value:
+      type: string
+      x-nullable: false
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false

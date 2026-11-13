@@ -1,0 +1,417 @@
+---
+tcp_request_rule:
+  title: TCP Request Rule
+  description: HAProxy TCP Request Rule configuration (corresponds to tcp-request)
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      type: string
+      enum: [connection, content, inspect-delay, session]
+      x-nullable: false
+    action:
+      type: string
+      enum:
+        - accept
+        - attach-srv
+        - capture
+        - do-resolve
+        - expect-netscaler-cip
+        - expect-proxy
+        - lua
+        - reject
+        - sc-add-gpc
+        - sc-inc-gpc
+        - sc-inc-gpc0
+        - sc-inc-gpc1
+        - sc-set-gpt
+        - sc-set-gpt0
+        - send-spoe-group
+        - set-bandwidth-limit
+        - set-bc-mark
+        - set-bc-tos
+        - set-dst-port
+        - set-dst
+        - set-fc-mark
+        - set-fc-tos
+        - set-log-level
+        - set-mark
+        - set-nice
+        - set-priority-class
+        - set-priority-offset
+        - set-src
+        - set-src-port
+        - set-tos
+        - set-var
+        - set-var-fmt
+        - silent-drop
+        - switch-mode
+        - track-sc
+        - unset-var
+        - use-service
+        - set-retries
+        - do-log
+      x-nullable: false
+      x-dependency:
+        type:
+          value: [connection, content, session]
+          required: true
+    capture_sample:
+      pattern: '^(?:[A-Za-z]+\("([A-Za-z\s]+)"\)|[A-Za-z]+)'
+      x-display-name: Capture Sample
+      type: string
+      x-dependency:
+        action:
+          value: capture
+          required: true
+        type:
+          value: [connection, content]
+          required: true
+    capture_len:
+      type: integer
+      x-display-name: Capture Length
+      x-dependency:
+        action:
+          value: capture
+          required: true
+        type:
+          value: [connection, content]
+          required: true
+    resolve_var:
+      type: string
+      x-display-name: Variable name
+      x-dependency:
+        action:
+          value: do-resolve
+          required: true
+        type:
+          value: [content]
+          required: true
+    resolve_resolvers:
+      type: string
+      x-display-name: Resolvers
+      x-dependency:
+        action:
+          value: do-resolve
+          required: true
+        type:
+          value: [content]
+          required: true
+    resolve_protocol:
+      type: string
+      enum: [ipv4, ipv6]
+      x-display-name: Protocol
+      x-dependency:
+        action:
+          value: do-resolve
+          required: false
+        type:
+          value: [content]
+          required: true
+    sc_idx:
+      type: string
+      x-display-name: Sticky counter Index
+      x-dependency:
+        action:
+          value: [sc-set-gpt]
+          required: true
+        type:
+          value: [connection, content, session]
+          required: true
+    sc_inc_id:
+      type: string
+      x-display-name: Sticky counter ID
+      x-dependency:
+        action:
+          value:
+            [
+              sc-add-gpc,
+              sc-inc-gpc,
+              sc-inc-gpc0,
+              sc-inc-gpc1,
+              sc-set-gpt,
+              sc-set-gpt0,
+            ]
+          required: true
+        type:
+          value: [connection, content, session]
+          required: true
+    sc_int:
+      type: integer
+      x-nullable: true
+      x-display-name: ScSet Integer Value
+      x-dependency:
+        type:
+          value: [sc-add-gpc, sc-set-gpt0]
+          required: true
+    gpt_value:
+      type: string
+      x-display-name: Sticky counter value
+      x-dependency:
+        action:
+          value: sc-set-gpt0
+          required: true
+        type:
+          value: [connection, content, session]
+          required: true
+    spoe_engine_name:
+      type: string
+      x-display-name: Engine name
+      x-dependency:
+        action:
+          value: send-spoe-group
+          required: true
+        type:
+          value: [content]
+          required: true
+    spoe_group_name:
+      type: string
+      x-display-name: Group name
+      x-dependency:
+        action:
+          value: send-spoe-group
+          required: true
+        type:
+          value: [content]
+          required: true
+    var_name:
+      type: string
+      pattern: '^[^\s]+$'
+      x-display-name: Variable name
+      x-dependency:
+        action:
+          value: [set-var, unset-var, set-var-fmt]
+          required: true
+        type:
+          value: [session, connection, content]
+    var_scope:
+      type: string
+      pattern: '^[^\s]+$'
+      x-display-name: Variable scope
+      x-dependency:
+        action:
+          value: [set-var, unset-var, set-var-fmt]
+          required: true
+        type:
+          value: [session, connection, content]
+    var_format:
+      type: string
+      x-display-name: Var Format
+      x-dependency:
+        action:
+          value: set-var-fmt
+          required: true
+        type:
+          value: [session, connection, content]
+    track_key:
+      type: string
+      x-display-name: Sample expression rule
+      x-dependency:
+        action:
+          value: [track-sc]
+          required: true
+        type:
+          value: [session, connection, content]
+    track_table:
+      type: string
+      x-display-name: Optional table name
+      x-dependency:
+        action:
+          value: [track-sc]
+          required: false
+        type:
+          value: [session, connection, content]
+    track_stick_counter:
+      type: integer
+      x-display-name: Track Stick Counter
+      x-nullable: true
+      x-dependency:
+        action:
+          value: [track-sc]
+          required: false
+        type:
+          value: [session, connection, content]
+    service_name:
+      type: string
+      x-display-name: Service name
+      x-dependency:
+        action:
+          value: use-service
+          required: true
+        type:
+          value: content
+    server_name:
+      type: string
+      x-display-name: Server name
+      x-dependency:
+        action:
+          value: attach-srv
+          required: true
+        type:
+          value: session
+    timeout:
+      type: integer
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+      x-dependency:
+        type:
+          value: inspect-delay
+          required: true
+    expr:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value:
+            - do-resolve
+            - set-bc-mark
+            - set-bc-tos
+            - set-dst
+            - set-dst-port
+            - set-fc-mark
+            - set-fc-tos
+            - set-priority-class
+            - set-priority-offset
+            - set-src
+            - set-src-port
+            - set-var
+            - set-retries
+          required: true
+        type:
+          value: [session, connection, content]
+    lua_action:
+      type: string
+      pattern: '^[^\s]+$'
+      x-display-name: Lua action name
+      x-dependency:
+        action:
+          value: lua
+          required: true
+        type:
+          value: [connection, content]
+    lua_params:
+      type: string
+      x-display-name: Lua action params
+      x-dependency:
+        action:
+          value: lua
+        type:
+          value: [connection, content]
+    bandwidth_limit_name:
+      type: string
+      x-display-name: Bandwidth limit name
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    bandwidth_limit_limit:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    bandwidth_limit_period:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    log_level:
+      type: string
+      enum: [emerg, alert, crit, err, warning, notice, info, debug, silent]
+      x-dependency:
+        action:
+          value: set-log-level
+          required: true
+        type:
+          value: content
+    log_profile:
+      type: string
+      x-display-name: Log Profile
+      x-dependency:
+        action:
+          value: do-log
+    rst_ttl:
+      type: integer
+      x-display-name: RST TTL
+      x-dependency:
+        type:
+          value: [silent-drop]
+          required: true
+    mark_value:
+      type: string
+      pattern: "^(0x[0-9A-Fa-f]+|[0-9]+)$"
+      x-display-name: Mark Value
+      x-dependency:
+        action:
+          value: set-mark
+          required: true
+        type:
+          value: [connection, content]
+    nice_value:
+      type: integer
+      minimum: -1024
+      maximum: 1024
+      x-nullable: false
+      x-display-name: Nice Value
+      x-dependency:
+        action:
+          value: set-nice
+          required: true
+        type:
+          value: content
+    tos_value:
+      type: string
+      pattern: "^(0x[0-9A-Fa-f]+|[0-9]+)$"
+      x-display-name: Tos Value
+      x-dependency:
+        action:
+          value: set-tos
+          required: true
+        type:
+          value: [connection, content]
+    switch_mode_proto:
+      type: string
+      x-display-name: Switch Mode Proto
+      x-dependency:
+        action:
+          value: switch-mode
+          required: true
+        type:
+          value: content
+    cond:
+      type: string
+      x-display-name: Condition
+      enum: [if, unless]
+      x-dependency:
+        type:
+          value: [connection, content, session]
+    cond_test:
+      type: string
+      x-display-name: Condition Test
+      x-dynamic-enum:
+        operation: getACLs
+        property: acl_name
+        freeFormat: true
+      x-dependency:
+        cond:
+          required: true
+        type:
+          value: [connection, content, session]
+          required: true
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+  example:
+    index: 0
+    type: connection
+    cond: if
+    cond_test: "{ src 192.168.0.0/16 }"

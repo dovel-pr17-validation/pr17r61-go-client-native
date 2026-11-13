@@ -1,0 +1,102 @@
+---
+acme:
+  title: ACME Provider
+  description: Define an ACME provider to generate certificates automatically
+  type: object
+  required:
+    - name
+    - directory
+  properties:
+    name:
+      type: string
+      description: ACME provider's name
+      x-nullable: false
+    account_key:
+      type: string
+      description: Path where the the ACME account key is stored
+    acme_provider:
+      type: string
+      description: DNS provider for the dns-01 challenge
+    acme_vars:
+      description: List of variables passed to the dns-01 provider (typically API keys)
+      additionalProperties:
+        type: string
+    bits:
+      type: integer
+      description: Number of bits used when generating an RSA certificate. Ignored when keytype is ECDSA (curves is used instead).
+      x-omitempty: true
+      x-nullable: true
+    challenge:
+      type: string
+      enum: ['http-01', 'dns-01', 'dns-persist-01']
+      description: ACME challenge type.
+    challenge_ready:
+      type: array
+      minItems: 1
+      maxItems: 2
+      uniqueItems: true
+      x-omitempty: true
+      items:
+        type: string
+        enum: [cli, dns, none]
+      description: |
+        How to wait for the DNS propagation: either wait for a CLI event on
+        the runtime socket (useful with dataplaneapi), or let HAProxy query
+        the DNS TXT record by itself using the default resolvers, or both,
+        or none at all.
+    contact:
+      type: string
+      description: Contact email for the ACME account
+    curves:
+      type: string
+      description: Curves used with the ECDSA key type
+    dns_delay:
+      type: integer
+      x-nullable: true
+      x-duration: true
+      x-default-unit: s
+      description: Delay before the first DNS resolution attempt and between retries.
+    dns_timeout:
+      type: integer
+      x-nullable: true
+      x-duration: true
+      x-default-unit: s
+      description: Timeout before DNS propagation check fails when using 'dns' in 'challenge_ready'.
+    directory:
+      type: string
+      pattern: '^https://[^\s]+$'
+      x-nullable: false
+      description: |
+        URL to the ACME provider's directory. For example:
+        https://acme-staging-v02.api.letsencrypt.org/directory
+    keytype:
+      type: string
+      enum: [RSA, ECDSA]
+      description: Type of key to generate
+    map:
+      type: string
+      description: The map which will be used to store the ACME token (key) and thumbprint
+    profile:
+      type: string
+      description: |
+        Request a specific certificate profile from the CA by including a 'profile'
+        field in the newOrder request (draft-ietf-acme-profiles). Profile names
+        are CA-specific short identifiers (e.g. 'classic', 'shortlived').
+    reuse_key:
+      type: string
+      enum: [enabled, disabled]
+      description: Try to reuse the private key instead of generating a new one.
+    eab_key_id:
+      type: string
+      description: Path where the EAB key id is stored
+    eab_mac_key:
+      type: string
+      description: Path where the EAB MAC key is stored
+    eab_mac_alg:
+      type: string
+      enum: [HS256, HS384, HS512]
+      description: MAC algorithm used for EAB signing
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false

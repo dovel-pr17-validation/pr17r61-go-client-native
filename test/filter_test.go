@@ -1,0 +1,256 @@
+// Copyright 2019 HAProxy Technologies
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+package test
+
+import (
+	_ "embed"
+	"fmt"
+	"os"
+	"reflect"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/haproxytech/client-native/v6/configuration"
+	"github.com/haproxytech/client-native/v6/models"
+	"github.com/stretchr/testify/require"
+)
+
+func filterExpectation() map[string]models.Filters {
+	initStructuredExpected()
+	res := StructuredToFilterMap()
+	// Add individual entries
+	for k, vs := range res {
+		for i, v := range vs {
+			key := fmt.Sprintf("%s/%d", k, i)
+			res[key] = models.Filters{v}
+		}
+	}
+	return res
+}
+
+func TestGetFilters(t *testing.T) { //nolint:gocognit
+	mfilters := make(map[string]models.Filters)
+	v, filters, err := clientTest.GetFilters(configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+	mfilters["frontend/test"] = filters
+
+	_, filters, err = clientTest.GetFilters(configuration.BackendParentName, "test_2", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	mfilters["backend/test_2"] = filters
+
+	checkFilters(t, mfilters)
+}
+
+func checkFilters(t *testing.T, got map[string]models.Filters) {
+	exp := filterExpectation()
+	for k, v := range got {
+		want, ok := exp[k]
+		require.True(t, ok, "k=%s", k)
+		require.Equal(t, len(want), len(v), "k=%s", k)
+		i := 0
+		for _, w := range want {
+			require.True(t, v[i].Equal(*w), "k=%s - diff %v", k, cmp.Diff(*v[i], *w))
+			i++
+		}
+	}
+}
+
+func TestGetFilter(t *testing.T) {
+	m := make(map[string]models.Filters)
+	v, f, err := clientTest.GetFilter(0, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+	m["frontend/test/0"] = models.Filters{f}
+
+	_, err = f.MarshalBinary()
+	if err != nil {
+		t.Error(err.Error())
+	}
+	_, _, err = clientTest.GetFilter(3, configuration.BackendParentName, "test2", "")
+	if err == nil {
+		t.Error("Should throw error, non existent filter")
+	}
+
+	checkFilters(t, m)
+}
+
+func TestCreateEditDeleteFilter(t *testing.T) {
+	// TestCreateFilter
+	id := int64(1)
+	f := &models.Filter{
+		Type:       "spoe",
+		SpoeEngine: "test",
+		SpoeConfig: "test.cfg",
+	}
+
+	err := clientTest.CreateFilter(id, configuration.FrontendParentName, "test", f, "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	v, ondiskF, err := clientTest.GetFilter(1, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if !reflect.DeepEqual(ondiskF, f) {
+		fmt.Printf("Created filter: %v\n", ondiskF)
+		fmt.Printf("Given filter: %v\n", f)
+		t.Error("Created filter not equal to given filter")
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+
+	// TestEditFilter
+	f = &models.Filter{
+		Type:       "spoe",
+		SpoeConfig: "bla.cfg",
+		SpoeEngine: "bla",
+	}
+
+	err = clientTest.EditFilter(1, configuration.FrontendParentName, "test", f, "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	v, ondiskF, err = clientTest.GetFilter(1, configuration.FrontendParentName, "test", "")
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if !reflect.DeepEqual(ondiskF, f) {
+		fmt.Printf("Edited filter: %v\n", ondiskF)
+		fmt.Printf("Given filter: %v\n", f)
+		t.Error("Edited filter not equal to given filter")
+	}
+
+	if v != version {
+		t.Errorf("Version %v returned, expected %v", v, version)
+	}
+
+	// TestDeleteFilter
+	err = clientTest.DeleteFilter(3, "frontend", "test", "", version)
+	if err != nil {
+		t.Error(err.Error())
+	} else {
+		version++
+	}
+
+	if v, _ := clientTest.GetVersion(""); v != version {
+		t.Error("Version not incremented")
+	}
+
+	_, filters, _ := clientTest.GetFilters(configuration.FrontendParentName, "test", "")
+	_ = filters
+
+	_, _, err = clientTest.GetFilter(6, "frontend", "test", "")
+	if err == nil {
+		t.Error("DeleteFilter failed, filter 5 still exists")
+	}
+
+	err = clientTest.DeleteFilter(1, configuration.BackendParentName, "test_2", "", version)
+	if err == nil {
+		t.Error("Should throw error, non existent filter")
+		version++
+	}
+}
+
+// TestCompressionFilterCRUD exercises the plain filter CRUD API with the two
+// compression direction filters on both parent types, checking type, order and
+// metadata across create, get, edit and replace.
+func TestCompressionFilterCRUD(t *testing.T) {
+	tests := []struct {
+		name       string
+		parentType string
+		parentName string
+	}{
+		{"frontend", configuration.FrontendParentName, "test"},
+		{"backend", configuration.BackendParentName, "test_2"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			clientTest, filename, err := getTestClient()
+			require.NoError(t, err)
+			defer os.Remove(filename)
+
+			ver := func() int64 {
+				v, err := clientTest.GetVersion("")
+				require.NoError(t, err)
+				return v
+			}
+
+			reqMeta := map[string]interface{}{"key": "req"}
+			resMeta := map[string]interface{}{"key": "res"}
+
+			// Start from a known empty filter list.
+			require.NoError(t, clientTest.ReplaceFilters(tt.parentType, tt.parentName, models.Filters{}, "", ver()))
+
+			// Create both compression types.
+			require.NoError(t, clientTest.CreateFilter(0, tt.parentType, tt.parentName, &models.Filter{Type: "comp-req", Metadata: reqMeta}, "", ver()))
+			require.NoError(t, clientTest.CreateFilter(1, tt.parentType, tt.parentName, &models.Filter{Type: "comp-res", Metadata: resMeta}, "", ver()))
+
+			_, filters, err := clientTest.GetFilters(tt.parentType, tt.parentName, "")
+			require.NoError(t, err)
+			requireCompressionFilterTypes(t, filters, "comp-req", "comp-res")
+
+			// Get a single filter back.
+			_, one, err := clientTest.GetFilter(0, tt.parentType, tt.parentName, "")
+			require.NoError(t, err)
+			require.Equal(t, "comp-req", one.Type)
+
+			// Edit one filter to the other compression type.
+			require.NoError(t, clientTest.EditFilter(1, tt.parentType, tt.parentName, &models.Filter{Type: "comp-req", Metadata: reqMeta}, "", ver()))
+			_, filters, err = clientTest.GetFilters(tt.parentType, tt.parentName, "")
+			require.NoError(t, err)
+			requireCompressionFilterTypes(t, filters, "comp-req", "comp-req")
+
+			// Replace the whole list and reorder; a whole-list write preserves
+			// the filter metadata.
+			require.NoError(t, clientTest.ReplaceFilters(tt.parentType, tt.parentName, models.Filters{
+				&models.Filter{Type: "comp-res", Metadata: resMeta},
+				&models.Filter{Type: "comp-req", Metadata: reqMeta},
+			}, "", ver()))
+			_, filters, err = clientTest.GetFilters(tt.parentType, tt.parentName, "")
+			require.NoError(t, err)
+			requireCompressionFilters(t, filters, []string{"comp-res", "comp-req"}, []map[string]interface{}{resMeta, reqMeta})
+
+			// Delete one filter.
+			require.NoError(t, clientTest.DeleteFilter(0, tt.parentType, tt.parentName, "", ver()))
+			_, filters, err = clientTest.GetFilters(tt.parentType, tt.parentName, "")
+			require.NoError(t, err)
+			requireCompressionFilterTypes(t, filters, "comp-req")
+		})
+	}
+}

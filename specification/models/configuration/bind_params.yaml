@@ -1,0 +1,377 @@
+---
+bind_params:
+  type: object
+  properties:
+    accept_netscaler_cip:
+      type: integer
+    accept_proxy:
+      type: boolean
+    allow_0rtt:
+      type: boolean
+    alpn:
+      type: string
+      x-display-name: ALPN Protocols
+      pattern: '^[^\s]+$'
+    backlog:
+      type: string
+    curves:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    ecdhe:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    # ca_file:
+    #  type: string
+    #  x-dependency:
+    #    ssl:
+    #      value: true
+    ca_ignore_err:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    ca_sign_file:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    ca_sign_pass:
+      type: string
+      x-display-name: Passphrase
+      x-dependency:
+        ssl:
+          value: true
+    ca_verify_file:
+      type: string
+      x-dependency:
+        ca_file:
+          value: true
+    cc:
+      type: string
+      x-display-name: TCP Congestion Control Algorithm
+    ciphers:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    ciphersuites:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    client_sigalgs:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    crl_file:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    crt_ignore_err:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    crt_list:
+      type: string
+      description: All of the certificate list files delimited by ':' as mentioned as a crt-list on the bind line.
+      x-dependency:
+        ssl:
+          value: true
+    default_crt_list:
+      type: array
+      x-omitempty: true
+      items:
+        type: string
+        pattern: '^[^\s]+$'
+    defer_accept:
+      type: boolean
+    expose_fd_listeners:
+      type: boolean
+    sslv3:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    force_sslv3:
+      description: This field is deprecated in favor of sslv3, and will be removed in a future release
+      type: boolean
+      x-deprecated: true
+    no_sslv3:
+      description: This field is deprecated in favor of sslv3, and will be removed in a future release
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      x-deprecated: true
+    tlsv10:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    force_tlsv10:
+      description: This field is deprecated in favor of tlsv10, and will be removed in a future release
+      type: boolean
+      x-deprecated: true
+    no_tlsv10:
+      description: This field is deprecated in favor of tlsv10, and will be removed in a future release
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      x-deprecated: true
+    tlsv11:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    force_tlsv11:
+      description: This field is deprecated in favor of tlsv11, and will be removed in a future release
+      type: boolean
+      x-deprecated: true
+    no_tlsv11:
+      description: This field is deprecated in favor of tlsv11, and will be removed in a future release
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      x-deprecated: true
+    tlsv12:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    no_tlsv12:
+      description: This field is deprecated in favor of tlsv12, and will be removed in a future release
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      x-deprecated: true
+    force_tlsv12:
+      description: This field is deprecated in favor of tlsv12, and will be removed in a future release
+      type: boolean
+      x-deprecated: true
+    tlsv13:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    force_tlsv13:
+      description: This field is deprecated in favor of tlsv13, and will be removed in a future release
+      type: boolean
+      x-deprecated: true
+    no_tlsv13:
+      description: This field is deprecated in favor of tlsv13, and will be removed in a future release
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      x-deprecated: true
+    generate_certificates:
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+    gid:
+      type: integer
+      x-display-name: Group ID
+    group:
+      type: string
+      x-display-name: Group name
+    guid_prefix:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+    id:
+      type: string
+      x-display-name: Socket ID
+    idle_ping:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    interface:
+      type: string
+    label:
+      type: string
+    level:
+      type: string
+      enum: [user, operator, admin]
+      example: user
+    severity_output:
+      type: string
+      x-display-name: Format
+      enum: [none, number, string]
+      example: none
+    maxconn:
+      type: integer
+      example: 1234
+    mode:
+      type: string
+    mss:
+      type: string
+    namespace:
+      type: string
+      example: app
+    nbconn:
+      type: integer
+      x-display-name: Number of connection
+    nice:
+      type: integer
+      example: 1
+    no_ca_names:
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+    no_alpn:
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+    no_tls_tickets:
+      x-deprecated: true
+      type: boolean
+      x-dependency:
+        ssl:
+          value: true
+      description: This field is deprecated in favor of tls_tickets, and will be removed in a future release
+    tls_tickets:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    npn:
+      type: string
+    prefer_client_ciphers:
+      type: boolean
+    proto:
+      type: string
+      x-display-name: Protocol name
+    shards:
+      type: string
+      pattern: '^(by-thread|by-group|[0-9]+)$'
+      x-display-name: Shards
+    sigalgs:
+      type: string
+      x-dependency:
+        ssl:
+          value: true
+    ssl:
+      type: boolean
+    ssl_certificate:  # crt command
+      type: string
+      pattern: '^[^\s]+$'
+      description: All of the certificates delimited by ':' as mentioned as a crt on the bind line.
+      x-dependency:
+        ssl:
+          value: true
+    ssl_cafile:
+      type: string
+      x-display-name: SSL CA File
+      pattern: '^[^\s]+$'
+      x-dependency:
+        ssl:
+          value: true
+    ssl_max_ver:
+      type: string
+      enum: [SSLv3, TLSv1.0, TLSv1.1, TLSv1.2, TLSv1.3]
+    ssl_min_ver:
+      type: string
+      enum: [SSLv3, TLSv1.0, TLSv1.1, TLSv1.2, TLSv1.3]
+    strict_sni:
+      type: boolean
+      x-deprecated: true
+      x-dependency:
+        ssl:
+          value: true
+    no_strict_sni:
+      type: boolean
+      x-deprecated: true
+      x-dependency:
+        ssl:
+          value: true
+    force_strict_sni:
+      type: string
+      enum: [enabled, disabled]
+      x-dependency:
+        ssl:
+          value: true
+    tcp_md5sig:
+      type: string
+      pattern: '^[^\s]+$'
+    tcp_ss:
+      type: integer
+      enum: [1, 2, 3]
+      description: Sets the TCP Save SYN option for all incoming connections instantiated from this listening socket
+    tcp_user_timeout:
+      type: integer
+      x-nullable: true
+    tfo:
+      type: boolean
+    thread:
+      type: string
+    tls_ticket_keys:
+      type: string
+    transparent:
+      type: boolean
+    v4v6:
+      type: boolean
+    v6only:
+      type: boolean
+    uid:
+      type: string
+    user:
+      type: string
+    verify:
+      type: string
+      enum: [none, optional, required]
+      x-dependency:
+        ssl:
+          value: enabled
+      example: none
+    quic-cc-algo:
+      type: string
+      enum: [cubic, newreno, bbr, nocc]
+    quic-force-retry:
+      type: boolean
+    quic-socket:
+      type: string
+      enum: [connection, listener]
+    quic_cc_algo_max_window:
+      type: integer
+      minimum: 10
+      maximum: 4194304
+      x-nullable: true
+      x-size: true
+      x-default-unit: k
+      x-dependency:
+        quic-cc-algo:
+    quic_cc_algo_burst_size:
+      type: integer
+      minimum: 0
+      maximum: 1024
+      x-nullable: true
+      x-dependency:
+        quic-cc-algo:
+    ktls:
+      type: string
+      enum: [on, off]
+      x-display-name: |-
+        Enables or disables ktls for those sockets. If enabled, kTLS will be used if the kernel supports it and the cipher is compatible.
+        This is only available on Linux kernel 4.17 and above.
+        EXPERIMENTAL OPTION.
+  additionalProperties: false

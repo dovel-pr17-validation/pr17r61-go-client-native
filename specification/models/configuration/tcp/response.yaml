@@ -1,0 +1,274 @@
+---
+tcp_response_rule:
+  title: TCP Response Rule
+  description: HAProxy TCP Response Rule configuration (corresponds to tcp-response)
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      type: string
+      enum: [content, inspect-delay]
+      x-nullable: false
+    action:
+      type: string
+      enum:
+        - accept
+        - close
+        - lua
+        - reject
+        - sc-add-gpc
+        - sc-inc-gpc
+        - sc-inc-gpc0
+        - sc-inc-gpc1
+        - sc-set-gpt
+        - sc-set-gpt0
+        - send-spoe-group
+        - set-bandwidth-limit
+        - set-fc-mark
+        - set-fc-tos
+        - set-log-level
+        - set-mark
+        - set-nice
+        - set-tos
+        - set-var
+        - set-var-fmt
+        - silent-drop
+        - unset-var
+        - do-log
+      x-nullable: false
+      x-dependency:
+        type:
+          value: content
+          required: true
+    timeout:
+      type: integer
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+      x-dependency:
+        type:
+          value: inspect-delay
+          required: true
+    lua_action:
+      type: string
+      pattern: '^[^\s]+$'
+      x-display-name: Lua action name
+      x-dependency:
+        action:
+          value: lua
+          required: true
+        type:
+          value: content
+    lua_params:
+      type: string
+      x-display-name: Lua action params
+      x-dependency:
+        action:
+          value: lua
+        type:
+          value: content
+    bandwidth_limit_name:
+      type: string
+      x-display-name: Bandwidth limit name
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    bandwidth_limit_limit:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    bandwidth_limit_period:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value: set-bandwidth-limit
+        type:
+          value: content
+    expr:
+      type: string
+      x-display-name: Standard HAProxy expression
+      x-dependency:
+        action:
+          value: [set-src-port, sc-set-gpt0, set-fc-mark, set-fc-tos]
+          required: true
+        type:
+          value: content
+    sc_id:
+      type: integer
+      x-dependency:
+        action:
+          value:
+            [
+              sc-add-gpc,
+              sc-inc-gpc,
+              sc-inc-gpc0,
+              sc-inc-gpc1,
+              sc-set-gpt,
+              sc-set-gpt0,
+            ]
+          required: true
+        type:
+          value: content
+    sc_idx:
+      type: integer
+      x-dependency:
+        action:
+          value: [sc-add-gpc, sc-set-gpt, sc-inc-gpc]
+          required: true
+        type:
+          value: content
+    sc_expr:
+      type: string
+      x-display-name: ScSet Expression Value
+      x-dependency:
+        action:
+          value: [sc-add-gpc, sc-inc-gpc]
+          required: true
+        type:
+          value: content
+    sc_int:
+      type: integer
+      x-nullable: true
+      x-display-name: ScSet Integer Value
+      x-dependency:
+        action:
+          value: [sc-add-gpc, sc-inc-gpc]
+          required: true
+        type:
+          value: content
+    spoe_engine:
+      type: string
+      x-display-name: SPOE Engine
+      pattern: '^[^\s]+$'
+      x-dependency:
+        action:
+          value: send-spoe-group
+          required: true
+        type:
+          value: content
+    spoe_group:
+      type: string
+      x-display-name: SPOE Group
+      pattern: '^[^\s]+$'
+      x-dependency:
+        action:
+          value: send-spoe-group
+          required: true
+        type:
+          value: content
+    log_level:
+      type: string
+      enum: [emerg, alert, crit, err, warning, notice, info, debug, silent]
+      x-dependency:
+        action:
+          value: set-log-level
+          required: true
+        type:
+          value: content
+    log_profile:
+      type: string
+      x-display-name: Log Profile
+      x-dependency:
+        action:
+          value: do-log
+    rst_ttl:
+      type: integer
+      x-display-name: RST TTL
+      x-dependency:
+        type:
+          value: [silent-drop]
+          required: true
+    mark_value:
+      type: string
+      pattern: "^(0x[0-9A-Fa-f]+|[0-9]+)$"
+      x-display-name: Mark Value
+      x-dependency:
+        action:
+          value: set-mark
+          required: true
+        type:
+          value: content
+    nice_value:
+      type: integer
+      minimum: -1024
+      maximum: 1024
+      x-nullable: false
+      x-display-name: Nice Value
+      x-dependency:
+        action:
+          value: set-nice
+          required: true
+        type:
+          value: content
+    tos_value:
+      type: string
+      pattern: "^(0x[0-9A-Fa-f]+|[0-9]+)$"
+      x-display-name: Tos Value
+      x-dependency:
+        action:
+          value: set-tos
+          required: true
+        type:
+          value: content
+    var_name:
+      type: string
+      pattern: '^[^\s]+$'
+      x-dependency:
+        action:
+          value: [unset-var]
+          required: true
+        type:
+          value: content
+    var_scope:
+      type: string
+      pattern: '^[^\s]+$'
+      x-dependency:
+        action:
+          value: unset-var
+        type:
+          value: content
+    var_format:
+      type: string
+      x-display-name: Var Format
+      x-dependency:
+        action:
+          value: set-var-fmt
+          required: true
+        type:
+          value: content
+    cond:
+      type: string
+      x-display-name: Condition
+      enum: [if, unless]
+      x-dependency:
+        type:
+          value: content
+    cond_test:
+      type: string
+      x-display-name: Condition Test
+      x-dynamic-enum:
+        operation: getACLs
+        property: acl_name
+        freeFormat: true
+      x-dependency:
+        cond:
+          required: true
+        type:
+          value: content
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+  example:
+    index: 0
+    type: content
+    cond: if
+    cond_test: "{ src 192.168.0.0/16 }"

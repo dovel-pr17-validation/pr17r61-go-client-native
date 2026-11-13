@@ -1,0 +1,220 @@
+---
+http_check:
+  title: HTTP Check
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      type: string
+      enum:
+        - comment
+        - connect
+        - disable-on-404
+        - expect
+        - send
+        - send-state
+        - set-var
+        - set-var-fmt
+        - unset-var
+      x-nullable: false
+    check_comment:
+      type: string
+      x-nullable: false
+      x-dependency:
+        type:
+          value: [comment, connect, expect, send]
+    default:
+      type: boolean
+      x-dependency:
+        type:
+          value: connect
+    port:
+      type: integer
+      minimum: 1
+      maximum: 65535
+      x-nullable: true
+      x-dependency:
+        type:
+          value: connect
+    port_string:
+      type: string
+      x-dependency:
+        type:
+          value: connect
+    addr:
+      type: string
+      pattern: '^[^\s]+$'
+      x-nullable: false
+      x-dependency:
+        type:
+          value: connect
+    send_proxy:
+      type: boolean
+      x-dependency:
+        type:
+          value: connect
+    via_socks4:
+      type: boolean
+      x-dependency:
+        type:
+          value: connect
+    ssl:
+      type: boolean
+      x-dependency:
+        type:
+          value: connect
+    sni:
+      type: string
+      x-dependency:
+        type:
+          value: connect
+    alpn:
+      type: string
+      pattern: '^[^\s]+$'
+      x-display-name: ALPN Protocols
+      x-dependency:
+        type:
+          value: connect
+    linger:
+      type: boolean
+      x-dependency:
+        type:
+          value: connect
+    proto:
+      type: string
+      x-nullable: false
+      x-dependency:
+        type:
+          value: connect
+    min_recv:
+      type: integer
+      x-nullable: true
+      x-dependency:
+        type:
+          value: expect
+    ok_status:
+      type: string
+      enum: [L7OK, L7OKC, L6OK, L4OK]
+      x-dependency:
+        type:
+          value: expect
+    error_status:
+      type: string
+      enum: [L7OKC, L7RSP, L7STS, L6RSP, L4CON]
+      x-dependency:
+        type:
+          value: expect
+    tout_status:
+      type: string
+      enum: [L7TOUT, L6TOUT, L4TOUT]
+      x-dependency:
+        type:
+          value: expect
+    on_success:
+      type: string
+      x-dependency:
+        type:
+          value: expect
+    on_error:
+      type: string
+      x-dependency:
+        type:
+          value: expect
+    status-code:
+      type: string
+      x-dependency:
+        type:
+          value: expect
+    exclamation_mark:
+      type: boolean
+      x-display-name: Expect Exclamation Mark
+      x-dependency:
+        type:
+          value: expect
+    match:
+      type: string
+      enum: [status, rstatus, hdr, fhdr, string, rstring]
+      x-display-name: Expect Match
+      pattern: '^[^\s]+$'
+      x-dependency:
+        type:
+          value: expect
+          required: true
+    pattern:
+      type: string
+      x-dependency:
+        type:
+          value: expect
+          required: true
+    method:
+      type: string
+      enum: [HEAD, PUT, POST, GET, TRACE, PATCH, DELETE, CONNECT, OPTIONS]
+      x-dependency:
+        type:
+          value: send
+    uri:
+      type: string
+      x-dependency:
+        type:
+          value: send
+    uri_log_format:
+      type: string
+      x-dependency:
+        type:
+          value: send
+    version:
+      type: string
+      x-dependency:
+        type:
+          value: send
+    headers:
+      type: array
+      x-omitempty: true
+      x-go-name: CheckHeaders
+      x-dependency:
+        type:
+          value: send
+      items:
+        $ref: "#/definitions/return_header"
+    body:
+      type: string
+      x-dependency:
+        type:
+          value: send
+    body_log_format:
+      type: string
+      x-dependency:
+        type:
+          value: send
+    var_name:
+      type: string
+      pattern: '^[^\s]+$'
+      x-dependency:
+        type:
+          value: [set-var, set-var-fmt, unset-var]
+          required: true
+    var_scope:
+      type: string
+      pattern: '^[^\s]+$'
+      x-dependency:
+        type:
+          value: [set-var, set-var-fmt, unset-var]
+          required: true
+    var_format:
+      type: string
+      x-display-name: Var Format
+      x-dependency:
+        type:
+          value: [set-var-fmt]
+          required: true
+    var_expr:
+      type: string
+      x-display-name: Var Expression
+      x-dependency:
+        type:
+          value: [set-var]
+          required: true
+    metadata:
+      additionalProperties:
+        type: object

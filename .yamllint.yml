@@ -1,0 +1,15 @@
+---
+extends: default
+
+ignore: |
+  specification/haproxy-spec.yaml
+  .github/
+
+rules:
+  line-length: disable
+  trailing-spaces:
+    level: warning
+  new-line-at-end-of-file:
+    level: warning
+  empty-lines:
+    level: warning

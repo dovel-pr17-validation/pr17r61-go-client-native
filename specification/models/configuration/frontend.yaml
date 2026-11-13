@@ -1,0 +1,379 @@
+---
+frontend:
+  type: object
+  description: Frontend with all its children resources
+  x-go-name: Frontend
+  allOf:
+    - $ref: "#/definitions/frontend_base"
+    - type: object
+      properties:
+        binds:
+          additionalProperties:
+            $ref: "#/definitions/bind"
+        backend_switching_rule_list:
+          $ref: "#/definitions/backend_switching_rules"
+          x-go-name: BackendSwitchingRuleList
+        acl_list:
+          $ref: "#/definitions/acls"
+          x-go-name: AclList
+        capture_list:
+          $ref: "#/definitions/captures"
+          x-go-name: CaptureList
+        filter_list:
+          $ref: "#/definitions/filters"
+          x-go-name: FilterList
+        log_target_list:
+          $ref: "#/definitions/log_targets"
+          x-go-name: LogTargetList
+        http_after_response_rule_list:
+          $ref: "#/definitions/http_after_response_rules"
+          x-go-name: HTTPAfterResponseRuleList
+        http_request_rule_list:
+          $ref: "#/definitions/http_request_rules"
+          x-go-name: HTTPRequestRuleList
+        http_response_rule_list:
+          $ref: "#/definitions/http_response_rules"
+          x-go-name: HTTPResponseRuleList
+        http_error_rule_list:
+          $ref: "#/definitions/http_error_rules"
+          x-go-name: HTTPErrorRuleList
+        tcp_request_rule_list:
+          $ref: "#/definitions/tcp_request_rules"
+          x-go-name: TCPRequestRuleList
+        quic_initial_rule_list:
+          $ref: "#/definitions/quic_initial_rules"
+          x-go-name: QUICInitialRuleList
+        ssl_front_use_list:
+          $ref: "#/definitions/ssl_front_uses"
+          x-go-name: SSLFrontUses
+        force_be_switch_list:
+          $ref: "#/definitions/force_be_switches"
+          x-go-name: ForceBeSwitchList
+frontend_base:
+  title: Frontend Base
+  description: HAProxy frontend configuration
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+      x-nullable: false
+    from:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+    mode:
+      type: string
+      enum: [http, tcp]
+    httplog:
+      type: boolean
+      x-display-name: HTTP Log
+      x-dependency:
+        mode:
+          value: http
+    logasap:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Log ASAP
+    clflog:
+      type: boolean
+      x-display-name: CLF Log
+      x-dependency:
+        mode:
+          value: http
+    tcplog:
+      type: boolean
+      x-display-name: TCP Log
+      x-dependency:
+        mode:
+          value: tcp
+    tcp_clflog:
+      type: boolean
+      x-display-name: TCP CLF Log
+      x-dependency:
+        mode:
+          value: tcp
+    log_format:
+      type: string
+    log_format_sd:
+      type: string
+      x-display-name: Log Format SD
+    log_tag:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:${}"]+$'
+    log_steps:
+      type: array
+      x-omitempty: true
+      x-go-name: LogSteps
+      items:
+        type: string
+        enum: [accept, request, connect, response, close, error, any]
+    log_separate_errors:
+      type: string
+      enum: [enabled, disabled]
+    dontlognull:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Don't Log Null
+    disable_h2_upgrade:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Disable HTTP/2 Upgrade
+    http-buffer-request:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: HTTP bufferrequest
+    http_connection_mode:
+      type: string
+      enum: [httpclose, http-server-close, http-keep-alive]
+      x-dependency:
+        mode:
+          value: http
+    http-drop-response-trailers:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Drop HTTP Response Trailers
+    client_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    client_fin_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    client_hs_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    http_request_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+      x-dependency:
+        mode:
+          value: http
+    http_keep_alive_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+      x-dependency:
+        mode:
+          value: http
+    tarpit_timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-duration: true
+      x-default-unit: ms
+    maxconn:
+      type: integer
+      x-nullable: true
+      x-display-name: Max Connections
+    backlog:
+      type: integer
+      x-nullable: true
+      x-display-name: Backlog
+    max_session_srv_conns:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      x-display-name: Max Session Server Connections
+    rate_limit_sessions:
+      type: integer
+      minimum: 0
+      maximum: 4294967295
+      x-nullable: true
+      x-display-name: Rate Limit Sessions
+    forwardfor:
+      $ref: "#/definitions/forwardfor"
+      x-dependency:
+        mode:
+          value: http
+    forwarded:
+      $ref: "#/definitions/forwarded"
+      x-omitempty: true
+      x-dependency:
+        mode:
+          value: http
+    default_backend:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+      x-dynamic-enum:
+        operation: getBackends
+        property: name
+    contstats:
+      type: string
+      enum: [enabled]
+      x-display-name: Continuous Statistics
+    tcpka:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: TCP Keep Alive
+      x-dependency:
+        mode:
+          value: tcp
+    clitcpka:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Client TCP Keep Alive
+      x-dependency:
+        mode:
+          value: tcp
+    stick_table:
+      $ref: "#/definitions/config_stick_table"
+    abortonclose:
+      type: string
+      enum: [enabled, disabled]
+    unique_id_format:
+      type: string
+      x-display-name: Unique ID format
+    unique_id_header:
+      type: string
+      x-display-name: Unique ID header
+    accept_invalid_http_request:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Accept Invalid HTTP Request
+    accept_unsafe_violations_in_http_request:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Accept Unsafe Violations in HTTP Request
+    h1_case_adjust_bogus_client:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: H1 Adjust Bogus Client
+    compression:
+      $ref: "#/definitions/compression"
+    stats_options:
+      $ref: "#/definitions/stats_options"
+    monitor_uri:
+      $ref: '#/definitions/monitor_uri'
+    monitor_fail:
+      $ref: '#/definitions/monitor_fail'
+    clitcpka_cnt:
+      type: integer
+      x-nullable: true
+      x-display-name: Clitcpka Cnt
+    clitcpka_idle:
+      type: integer
+      x-nullable: true
+      x-display-name: Clitcpka Idle
+      x-duration: true
+      x-default-unit: s
+    clitcpka_intvl:
+      type: integer
+      x-nullable: true
+      x-display-name: Clitcpka Intvl
+      x-duration: true
+      x-default-unit: s
+    guid:
+      type: string
+      pattern: '^[A-Za-z0-9-_.:]+$'
+    http_ignore_probes:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: HTTP Ignore Probes
+    http_use_proxy_header:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: HTTP Use Proxy Header
+    httpslog:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Httpslog
+    http_restrict_req_hdr_names:
+      type: string
+      enum: [preserve, delete, reject]
+      x-display-name: Restrict HTTP Request Header Names
+    independent_streams:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Independent Streams
+    nolinger:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Nolinger
+    originalto:
+      $ref: "#/definitions/originalto"
+    socket_stats:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Socket Stats
+    tcp_smart_accept:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Tcp Smart Accept
+    dontlog_normal:
+      type: string
+      enum: [enabled, disabled]
+    http_no_delay:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: HTTP No Delay
+    splice_auto:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Splice Auto
+    splice_request:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Splice Request
+    splice_response:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Splice Response
+    idle_close_on_response:
+      type: string
+      enum: [enabled, disabled]
+      x-display-name: Idle Close On Response
+    email_alert:
+      $ref: "#/definitions/email_alert"
+    description:
+      type: string
+      x-display-name: Description
+    id:
+      type: integer
+      x-nullable: true
+    enabled:
+      type: boolean
+    disabled:
+      type: boolean
+    error_files:
+      type: array
+      x-omitempty: true
+      x-go-name: ErrorFiles
+      items:
+        $ref: "#/definitions/errorfile"
+    errorfiles_from_http_errors:
+      type: array
+      x-omitempty: true
+      x-go-name: ErrorFilesFromHTTPErrors
+      items:
+        $ref: "#/definitions/errorfiles"
+    errorloc302:
+      $ref: "#/definitions/errorloc"
+    errorloc303:
+      $ref: "#/definitions/errorloc"
+    error_log_format:
+      type: string
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+  example:
+    name: test_frontend
+    mode: http
+    http_connection_mode: http-keep-alive
+    maxconn: 2000
+    default_backend: test_backend

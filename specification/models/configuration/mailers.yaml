@@ -1,0 +1,59 @@
+---
+mailers_section:
+  type: object
+  description: MailersSection with all its children resources
+  x-go-name: MailersSection
+  allOf:
+    - $ref: "#/definitions/mailers_section_base"
+    - type: object
+      properties:
+        mailer_entries:
+          additionalProperties:
+            $ref: "#/definitions/mailer_entry"
+mailers_section_base:
+  title: Mailers Section Base
+  description: A list of SMTP servers used by HAProxy to send emails.
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_]+$'
+      x-nullable: false
+    timeout:
+      type: integer
+      minimum: 0
+      x-nullable: true
+      description: Timeout to send an email in milliseconds
+      x-duration: true
+      x-default-unit: ms
+    metadata:
+      additionalProperties:
+        type: object
+  additionalProperties: false
+mailer_entry:
+  title: Mailer Entry
+  description: Mailer entry of a Mailers section
+  type: object
+  required:
+    - name
+    - address
+    - port
+  properties:
+    name:
+      type: string
+      pattern: '^[A-Za-z0-9-_${}"]+$'
+      x-nullable: false
+    address:
+      type: string
+      pattern: '^\S+$'
+      x-nullable: false
+    port:
+      type: integer
+      minimum: 1
+      maximum: 65535
+      x-nullable: false
+    metadata:
+      additionalProperties:
+        type: object

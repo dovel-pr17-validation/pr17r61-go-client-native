@@ -1,0 +1,80 @@
+---
+ssl_certificate:
+  title: SSL File
+  description: A file containing one or more SSL/TLS certificates and keys
+  type: object
+  properties:
+    file:
+      readOnly: true
+      type: string
+    storage_name:
+      readOnly: true
+      type: string
+    description:
+      readOnly: true
+      type: string
+    size:
+      readOnly: true
+      type: integer
+      x-nullable: true
+      description: File size in bytes.
+    status:
+      type: string
+      readOnly: true
+      x-omitempty: true
+      description: Only set when using the runtime API.
+    serial:
+      type: string
+    not_before:
+      type: string
+      format: date-time
+      readOnly: true
+      x-nullable: true
+      x-go-custom-tag: gorm:"type:timestamp with time zone"
+    not_after:
+      type: string
+      format: date-time
+      readOnly: true
+      x-nullable: true
+      x-go-custom-tag: gorm:"type:timestamp with time zone"
+    algorithm:
+      readOnly: true
+      type: string
+    sha1_finger_print:
+      readOnly: true
+      type: string
+    sha256_finger_print:
+      readOnly: true
+      type: string
+    domains:
+      readOnly: true
+      type: string
+      x-omitempty: true
+    issuers:
+      type: string
+      readOnly: true
+      x-omitempty: true
+    ip_addresses:
+      readOnly: true
+      type: string
+      x-omitempty: true
+    authority_key_id:
+      readOnly: true
+      type: string
+    subject:
+      readOnly: true
+      type: string
+    subject_alternative_names:
+      readOnly: true
+      type: string
+    subject_key_id:
+      readOnly: true
+      type: string
+    chain_subject:
+      readOnly: true
+      type: string
+      x-omitempty: true
+    chain_issuer:
+      readOnly: true
+      type: string
+      x-omitempty: true

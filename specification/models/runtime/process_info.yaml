@@ -1,0 +1,13 @@
+---
+process_info:
+  title: HAProxy Information
+  description: General HAProxy process information
+  type: object
+  x-omitempty: true
+  properties:
+    runtimeAPI:
+      type: string
+    error:
+      type: string
+    info:
+      $ref: '#/definitions/process_info_item'

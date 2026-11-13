@@ -1,0 +1,18 @@
+---
+map:
+  title: Map File
+  description: Map File
+  type: object
+  properties:
+    id:
+      type: string
+    file:
+      type: string
+    storage_name:
+      type: string
+    description:
+      type: string
+    size:
+      type: integer
+      x-nullable: true
+      description: File size in bytes.

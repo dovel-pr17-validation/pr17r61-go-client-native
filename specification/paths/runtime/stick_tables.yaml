@@ -1,0 +1,38 @@
+---
+stick_tables:
+  get:
+    summary: Return Stick Tables
+    description: Returns an array of all stick tables.
+    operationId: getStickTables
+    tags:
+      - StickTable
+    responses:
+      '200':
+        description: Successful operation
+        schema:
+          $ref: "#/definitions/stick_tables"
+      'default':
+        $ref: '#/responses/DefaultError'
+stick_tables_one:
+  get:
+    summary: Return Stick Table
+    description: Returns one stick table from runtime.
+    operationId: getStickTable
+    tags:
+      - StickTable
+    parameters:
+      - name: name
+        in: path
+        description: Stick table name
+        required: true
+        type: string
+        pattern: '^[^\r\n<>*;$#&{}"]+$'
+    responses:
+      '200':
+        description: Successful operation
+        schema:
+          $ref: "#/definitions/stick_table"
+      '404':
+        $ref: '#/responses/NotFound'
+      'default':
+        $ref: '#/responses/DefaultError'

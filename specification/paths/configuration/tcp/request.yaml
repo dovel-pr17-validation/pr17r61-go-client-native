@@ -1,0 +1,192 @@
+---
+tcp_request_rules:
+  get:
+    summary: Return an array of all TCP Request Rules
+    description: Returns all TCP Request Rules that are configured in specified parent and parent type.
+    operationId: getAllTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - $ref: "#/parameters/parent_name"
+      - $ref: "#/parameters/transaction_id"
+    responses:
+      '200':
+        description: Successful operation
+        headers:
+          Configuration-Version:
+            description: Configuration file version
+            type: string
+        schema:
+          $ref: "#/definitions/tcp_request_rules"
+      'default':
+        $ref: '#/responses/DefaultError'
+  put:
+    summary: Replace an TCP Request Rule list
+    description: Replaces a whole list of TCP Request Rules with the list given in parameter
+    operationId: replaceAllTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - $ref: "#/parameters/parent_name"
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/tcp_request_rules'
+      - $ref: "#/parameters/transaction_id"
+      - $ref: "#/parameters/version"
+      - $ref: "#/parameters/force_reload"
+    responses:
+      '202':
+        description: Configuration change accepted and reload requested
+        headers:
+          Reload-ID:
+            description: ID of the requested reload
+            type: string
+        schema:
+          $ref: "#/definitions/tcp_request_rules"
+      '200':
+        description: All TCP Request Rule lines replaced
+        schema:
+          $ref: '#/definitions/tcp_request_rules'
+      '400':
+        $ref: '#/responses/BadRequest'
+      'default':
+        $ref: '#/responses/DefaultError'
+tcp_request_rules_one:
+  get:
+    summary: Return one TCP Request Rule
+    description: Returns one TCP Request Rule configuration by it's index in the specified parent.
+    operationId: getTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - name: index
+        in: path
+        description: TCP Request Rule Index
+        required: true
+        type: integer
+      - $ref: "#/parameters/parent_name"
+      - $ref: "#/parameters/transaction_id"
+    responses:
+      '200':
+        description: Successful operation
+        headers:
+          Configuration-Version:
+            description: Configuration file version
+            type: string
+        schema:
+          $ref: "#/definitions/tcp_request_rule"
+      '404':
+        $ref: '#/responses/NotFound'
+      'default':
+        $ref: '#/responses/DefaultError'
+  put:
+    summary: Replace a TCP Request Rule
+    description: Replaces a TCP Request Rule configuration by it's index in the specified parent.
+    operationId: replaceTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - name: index
+        in: path
+        description: TCP Request Rule Index
+        required: true
+        type: integer
+      - $ref: "#/parameters/parent_name"
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/tcp_request_rule'
+      - $ref: "#/parameters/transaction_id"
+      - $ref: "#/parameters/version"
+      - $ref: "#/parameters/force_reload"
+    responses:
+      '202':
+        description: Configuration change accepted and reload requested
+        headers:
+          Reload-ID:
+            description: ID of the requested reload
+            type: string
+        schema:
+          $ref: "#/definitions/tcp_request_rule"
+      '200':
+        description: TCP Request Rule replaced
+        schema:
+          $ref: '#/definitions/tcp_request_rule'
+      '400':
+        $ref: '#/responses/BadRequest'
+      '404':
+        $ref: '#/responses/NotFound'
+      'default':
+        $ref: '#/responses/DefaultError'
+  delete:
+    summary: Delete a TCP Request Rule
+    description: Deletes a TCP Request Rule configuration by it's index from the specified parent.
+    operationId: deleteTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - name: index
+        in: path
+        description: TCP Request Rule Index
+        required: true
+        type: integer
+      - $ref: "#/parameters/parent_name"
+      - $ref: "#/parameters/transaction_id"
+      - $ref: "#/parameters/version"
+      - $ref: "#/parameters/force_reload"
+    responses:
+      '202':
+        description: Configuration change accepted and reload requested
+        headers:
+          Reload-ID:
+            description: ID of the requested reload
+            type: string
+      '204':
+        description: TCP Request Rule deleted
+      '404':
+        $ref: '#/responses/NotFound'
+      'default':
+        $ref: '#/responses/DefaultError'
+  post:
+    summary: Add a new TCP Request Rule
+    description: Adds a new TCP Request Rule of the specified type in the specified parent.
+    operationId: createTCPRequestRule{{ .ParentType }}
+    tags:
+      - TCPRequestRule
+    parameters:
+      - name: index
+        in: path
+        description: TCP Request Rule Index
+        required: true
+        type: integer
+      - $ref: "#/parameters/parent_name"
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/tcp_request_rule'
+      - $ref: "#/parameters/transaction_id"
+      - $ref: "#/parameters/version"
+      - $ref: "#/parameters/force_reload"
+    responses:
+      '202':
+        description: Configuration change accepted and reload requested
+        headers:
+          Reload-ID:
+            description: ID of the requested reload
+            type: string
+        schema:
+          $ref: "#/definitions/tcp_request_rule"
+      '201':
+        description: TCP Request Rule created
+        schema:
+          $ref: '#/definitions/tcp_request_rule'
+      '409':
+        $ref: '#/responses/AlreadyExists'
+      '400':
+        $ref: '#/responses/BadRequest'
+      'default':
+        $ref: '#/responses/DefaultError'

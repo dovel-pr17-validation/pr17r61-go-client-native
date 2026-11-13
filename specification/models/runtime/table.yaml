@@ -1,0 +1,66 @@
+---
+table:
+  title: Stick Table
+  description: Stick Table Information
+  type: object
+  properties:
+    name:
+      type: string
+    type:
+      type: string
+      enum: [ip, ipv6, integer, string, binary]
+    size:
+      type: integer
+      x-nullable: true
+    used:
+      type: integer
+      x-nullable: true
+    fields:
+      type: array
+      x-omitempty: true
+      items:
+        x-go-name: StickTableField
+        type: object
+        properties:
+          field:
+            type: string
+            enum:
+              - bytes_in_cnt
+              - bytes_in_rate
+              - bytes_out_cnt
+              - bytes_out_rate
+              - conn_cnt
+              - conn_cur
+              - conn_rate
+              - glitch_cnt
+              - glitch_rate
+              - gpc
+              - gpc_rate
+              - gpc0
+              - gpc0_rate
+              - gpc1
+              - gpc1_rate
+              - gpt0
+              - gpt
+              - http_req_cnt
+              - http_req_rate
+              - http_err_cnt
+              - http_err_rate
+              - http_fail_cnt
+              - http_fail_rate
+              - server_id
+              - sess_cnt
+              - sess_rate
+          type:
+            type: string
+            enum: [rate, counter]
+          period:
+            type: integer
+            x-dependency:
+              type:
+                value: rate
+          idx:
+            type: integer
+            x-dependency:
+              field:
+                value: [gpc, gpc_rate, gpt]
