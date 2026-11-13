@@ -15,7 +15,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/google/renameio v1.0.1
 	github.com/google/uuid v1.6.0
-	github.com/haproxytech/client-native/v5 v5.1.15
+	github.com/haproxytech/client-native/v5 v5.1.29
 	github.com/haproxytech/go-logger v1.1.0
 	github.com/haproxytech/go-method-gen v0.1.4
 	github.com/joho/godotenv v1.5.1
